@@ -1,14 +1,15 @@
-package com.example.kj.myapplication.core;
+package com.example.kj.myapplication.core.request;
 
 import android.animation.Animator;
 import android.os.Handler;
 import android.support.v4.animation.ValueAnimatorCompat;
 
+import com.example.kj.myapplication.core.EventBus;
 import com.example.kj.myapplication.core.request.Request;
 
 import java.util.Random;
 
-class RequestThread extends Thread{
+public class RequestThread extends Thread{
     final public static String NAME = "";
     private Request mRequest;
 

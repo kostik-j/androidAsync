@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.example.kj.myapplication.core.request.RequestEmptyInt;
 import com.example.kj.myapplication.core.request.RequestEmptyString;
+import com.example.kj.myapplication.core.request.RequestThread;
 
 public class ApiRequestManager {
     private EventBus mEventBus;
