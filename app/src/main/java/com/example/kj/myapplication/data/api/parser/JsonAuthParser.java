@@ -2,6 +2,8 @@ package com.example.kj.myapplication.data.api.parser;
 
 import com.example.kj.myapplication.entity.SecretToken;
 import com.example.kj.myapplication.entity.AuthData;
+import com.example.kj.myapplication.entity.SidToken;
+
 import org.json.JSONObject;
 
 public class JsonAuthParser implements Parser<AuthData> {
@@ -21,7 +23,8 @@ public class JsonAuthParser implements Parser<AuthData> {
             if (isAuth) {
                 String secretStr = response.getString(FIELD_AUTH_SECRET);
                 SecretToken secret = new SecretToken(secretStr);
-                String sid = response.getString(FIELD_SID);
+                String sidStr = response.getString(FIELD_SID);
+                SidToken sid = new SidToken(sidStr);
                 JSONObject profile = response.getJSONObject(FIELD_PROFILE);
                 long anketaId = profile.getLong(FIELD_ANKETA_ID);
                 String name = profile.getString(FIELD_NAME);

@@ -1,4 +1,4 @@
-package com.example.kj.myapplication;
+package com.example.kj.myapplication.core;
 
 import android.content.Context;
 

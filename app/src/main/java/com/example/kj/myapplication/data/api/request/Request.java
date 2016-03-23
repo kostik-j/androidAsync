@@ -2,9 +2,10 @@ package com.example.kj.myapplication.data.api.request;
 
 import com.example.kj.myapplication.data.api.parser.Parser;
 import com.example.kj.myapplication.entity.AuthData;
+import com.example.kj.myapplication.entity.SidToken;
 
 public abstract class Request<T> {
-    protected AuthData authData;
+    private SidToken mSid;
 
     /**
      * Парсер разбирает json и возвращает модель, либо ошибку
@@ -16,6 +17,14 @@ public abstract class Request<T> {
      * @return T
      */
     protected abstract String getData();
+
+    public SidToken getSid() {
+        return mSid;
+    }
+
+    public void setSid(SidToken sid) {
+        this.mSid = sid;
+    }
 
     /**
      * Идентификатор запроса использется для подписки

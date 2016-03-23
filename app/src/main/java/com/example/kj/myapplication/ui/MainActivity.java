@@ -1,10 +1,11 @@
-package com.example.kj.myapplication;
+package com.example.kj.myapplication.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.kj.myapplication.R;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.core.Callback;
 import com.example.kj.myapplication.core.EventDispatcher;

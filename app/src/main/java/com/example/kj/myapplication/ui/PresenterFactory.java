@@ -1,5 +1,6 @@
-package com.example.kj.myapplication;
+package com.example.kj.myapplication.ui;
 
+import com.example.kj.myapplication.core.IMvpPresenter;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.ui.login.LoginPresenter;
 

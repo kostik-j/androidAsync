@@ -6,6 +6,7 @@ public class JsonProfileParser implements Parser<Profile> {
 
     @Override
     public Profile parse(String string) {
+
         return new Profile();
     }
 }

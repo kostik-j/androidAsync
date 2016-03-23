@@ -3,9 +3,11 @@ package com.example.kj.myapplication;
 import android.app.Application;
 import android.os.Handler;
 
+import com.example.kj.myapplication.core.IMvpPresenter;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.core.EventDispatcher;
 import com.example.kj.myapplication.data.local.PreferenceProvider;
+import com.example.kj.myapplication.ui.PresenterFactory;
 
 public class MyApplication extends Application {
 
@@ -37,7 +39,8 @@ public class MyApplication extends Application {
 
     public ApiRequestManager getApiRequestManager() {
         if (mApiRequestManager == null) {
-            mApiRequestManager = new ApiRequestManager(getEventBus(), new Handler(getMainLooper()));
+            mApiRequestManager = new ApiRequestManager(
+                    getEventBus(), new Handler(getMainLooper()), getPreferenceProvider());
         }
         return mApiRequestManager;
     }

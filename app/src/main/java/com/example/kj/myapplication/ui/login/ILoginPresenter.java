@@ -1,7 +1,7 @@
 package com.example.kj.myapplication.ui.login;
 
 
-import com.example.kj.myapplication.IMvpPresenter;
+import com.example.kj.myapplication.core.IMvpPresenter;
 
 public interface ILoginPresenter extends IMvpPresenter<ILoginView> {
 

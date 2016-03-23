@@ -1,6 +1,6 @@
 package com.example.kj.myapplication.ui.login;
 
-import com.example.kj.myapplication.IMvpView;
+import com.example.kj.myapplication.core.IMvpView;
 
 public interface ILoginView extends IMvpView {
 

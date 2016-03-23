@@ -13,11 +13,9 @@ public class ProfileRequest extends Request<Profile> {
 
     private MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
     private NetworkRequest networkRequest = new NetworkRequest();
-    private String mSid;
 
-    public ProfileRequest(String sid, Parser<Profile> parser) {
+    public ProfileRequest(Parser<Profile> parser) {
         setParser(parser);
-        mSid = sid;
     }
 
     @Override
@@ -29,9 +27,10 @@ public class ProfileRequest extends Request<Profile> {
     protected String getData() {
         URL url = null;
         try {
+            String sid = getSid() == null ? "" : getSid().toString();
             url = new URL(
                 mMambaUrlBuilder.getProfile().toString()
-                + "?sid=" + mSid + "&lang_id=en&dateType=timestamp"
+                + "?sid=" + sid + "&lang_id=en&dateType=timestamp"
             );
         } catch (MalformedURLException e) {
             e.printStackTrace();

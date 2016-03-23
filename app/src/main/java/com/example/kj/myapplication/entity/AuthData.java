@@ -4,10 +4,10 @@ public class AuthData {
     private long mAnketaId;
     private String mName;
     private String mLogin;
-    private String mSid;
+    private SidToken mSid;
     private SecretToken mSecret;
 
-    public AuthData(long anketaId, String name, String login, String sid, SecretToken secret) {
+    public AuthData(long anketaId, String name, String login, SidToken sid, SecretToken secret) {
         mAnketaId = anketaId;
         mName = name;
         mLogin = login;
@@ -27,7 +27,7 @@ public class AuthData {
         return mLogin;
     }
 
-    public String getSid() {
+    public SidToken getSid() {
         return mSid;
     }
 
