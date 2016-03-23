@@ -103,6 +103,10 @@ public class ApiRequestManager {
         buildThread(request).start();
     }
 
+    public int onAuthBySecret(Callback<AuthData> callback) {
+        return mEventDispatcher.subscribe(SecretAuthRequest.class.getSimpleName(), callback);
+    }
+
     public void setmSidToken(SidToken sidToken) {
         this.mSidToken = sidToken;
     }

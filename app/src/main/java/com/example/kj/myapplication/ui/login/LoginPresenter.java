@@ -13,7 +13,6 @@ final public class LoginPresenter implements ILoginPresenter {
     private ILoginView mView;
     ApiRequestManager mRequestManager;
 
-
     public LoginPresenter(ApiRequestManager requestManager) {
         mRequestManager = requestManager;
     }
@@ -38,9 +37,6 @@ final public class LoginPresenter implements ILoginPresenter {
         mRequestManager.onGetProfile(new Callback<Profile>() {
             @Override
             public void execute(Profile i) {
-                Log.d("ASD", "ASD");
-                Log.d("ASD", "ASD");
-                Log.d("ASD", "ASD");
             }
         });
     }
