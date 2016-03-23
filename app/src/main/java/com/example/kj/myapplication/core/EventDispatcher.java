@@ -3,7 +3,7 @@ package com.example.kj.myapplication.core;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class EventBus {
+public class EventDispatcher {
 
     private class Subscription{
         private Callback mCallback;
