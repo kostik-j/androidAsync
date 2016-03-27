@@ -29,7 +29,11 @@ abstract public class JsonBaseParser<T> {
             }
 
             // в лббой не понятной ситуации кидаем на авторизацию
-            errorCode = isAuth ? jsonObject.getInt(FIELD_ERROR_CODE) : 31;
+            if (jsonObject.has(FIELD_ERROR_CODE)) {
+                errorCode = jsonObject.getInt(FIELD_ERROR_CODE);
+            } else {
+                errorCode = isAuth ?errorCode : 31;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
