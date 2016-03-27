@@ -28,9 +28,8 @@ final public class LoginPresenter extends BasePresenter<ILoginView> {
                     getView().hideProgress();
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("mamba", "anketa", ""));
                     intent.putExtra("anketaId", result.getAnketaId());
-                    getView().getViewContext().startActivity(intent);
                     getView().close();
-
+                    getView().getViewContext().startActivity(intent);
                 }
             })
         );

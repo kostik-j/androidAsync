@@ -34,6 +34,8 @@ public class AlbumsAdapter extends ArrayAdapter<Album> {
         tvName.setText(album.getName());
         if (!album.getPhoto().isEmpty()) {
             Picasso.with(mContext).load(album.getPhoto()).into(ivPhoto);
+        } else {
+            ivPhoto.setImageResource(R.drawable.no_photo_man);
         }
         return convertView;
     }

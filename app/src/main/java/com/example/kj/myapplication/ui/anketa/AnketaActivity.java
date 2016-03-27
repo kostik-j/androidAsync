@@ -81,6 +81,8 @@ public class AnketaActivity extends AppCompatActivity
         mTvInterests.setText(TextUtils.join(", ", anketa.getInterests()));
         if (!anketa.getPhoto().isEmpty()) {
             Picasso.with(this).load(anketa.getPhoto()).into(mIvPhoto);
+        } else {
+            mIvPhoto.setImageResource(R.drawable.no_photo_man);
         }
     }
 

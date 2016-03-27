@@ -37,6 +37,8 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                 (R.plurals.messages, contact.getMessageCount(), contact.getMessageCount()));
         if (!contact.getPhoto().isEmpty()) {
             Picasso.with(mContext).load(contact.getPhoto()).into(ivPhoto);
+        } else {
+            ivPhoto.setImageResource(R.drawable.no_photo_man_small);
         }
         return convertView;
     }

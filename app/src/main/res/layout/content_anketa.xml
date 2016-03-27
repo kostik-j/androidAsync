@@ -44,7 +44,7 @@
                 android:id="@+id/tvInterests" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contacts"
                 android:id="@+id/btnContacts"
@@ -52,7 +52,7 @@
                 android:visibility="gone" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/albums"
                 android:id="@+id/btnAlbums"
