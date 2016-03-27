@@ -52,6 +52,10 @@ public class ContactsActivity extends AppCompatActivity
 
     @Override
     public void showContacts(ArrayList<Contact> contacts) {
+        mToolbar.setTitle(
+            getResources().getQuantityString(R.plurals.contacts, contacts.size(), contacts.size())
+        );
+
         mContactsAdapter.clear();
         mContactsAdapter.addAll(contacts);
     }

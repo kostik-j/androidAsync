@@ -3,6 +3,7 @@ package com.example.kj.myapplication.ui.login;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.kj.myapplication.core.Callback;
 import com.example.kj.myapplication.core.BasePresenter;
@@ -38,7 +39,13 @@ final public class LoginPresenter extends BasePresenter<ILoginView> {
             getRequestManager().onApiError(new Callback<ApiError>() {
                 @Override
                 public void execute(ApiError result) {
-                    Log.d("asd", "asdasd");
+                String message = result.getDetailMessage();
+                Toast.makeText(
+                    getView().getViewContext(),
+                    message.isEmpty() ? "Ошибка: " + String.valueOf(result.getErrorCode()) : message,
+                    Toast.LENGTH_SHORT
+                ).show();
+                getView().hideProgress();
                 }
             })
         );

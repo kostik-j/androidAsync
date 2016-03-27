@@ -31,7 +31,7 @@ public class RequestThread extends Thread{
             });
         } catch (ApiErrorException e) {
             // TODO: 26.03.16 "api.error" перенести константу куданить
-            final ApiError errorObject = new ApiError(e.getErrorCode());
+            final ApiError errorObject = new ApiError(e.getErrorCode(), e.getMessage());
             mMainHandler.post(new Runnable() {
                 @Override
                 public void run() { mEventDispatcher.dispatch("api.error", errorObject); }

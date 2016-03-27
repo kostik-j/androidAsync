@@ -43,12 +43,12 @@ public class LoginActivity extends AppCompatActivity
         findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String login = mLoginView.getText().toString();
-                String password = mPasswordView.getText().toString();
+            String login = mLoginView.getText().toString();
+            String password = mPasswordView.getText().toString();
 
-                if (!login.isEmpty() && !password.isEmpty()) {
-                    mPresenter.login(login, password);
-                }
+            if (!login.isEmpty() && !password.isEmpty()) {
+                mPresenter.login(login, password);
+            }
             }
         });
     }

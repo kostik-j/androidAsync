@@ -74,7 +74,6 @@ public class AlbumsActivity extends AppCompatActivity
         mToolbar.setTitle(
             getResources().getQuantityString(R.plurals.albums, albums.size(), albums.size())
         );
-
     }
 
     @Override

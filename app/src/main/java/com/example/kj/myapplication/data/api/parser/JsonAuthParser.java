@@ -18,16 +18,13 @@ public class JsonAuthParser extends JsonBaseParser<AuthData> {
     @Override
     protected AuthData mapResponseToObject(JSONObject object) throws JSONException {
         try {
-            boolean isAuth = object.getBoolean(FIELD_IS_AUTH);
-            if (isAuth) {
-                String secretStr = object.getString(FIELD_AUTH_SECRET);
-                SecretToken secret = new SecretToken(secretStr);
-                JSONObject profile = object.getJSONObject(FIELD_PROFILE);
-                long anketaId = profile.getLong(FIELD_ANKETA_ID);
-                String name = profile.getString(FIELD_NAME);
-                String login = profile.getString(FIELD_LOGIN);
-                return new AuthData(anketaId, name, login, secret);
-            }
+            String secretStr = object.getString(FIELD_AUTH_SECRET);
+            SecretToken secret = new SecretToken(secretStr);
+            JSONObject profile = object.getJSONObject(FIELD_PROFILE);
+            long anketaId = profile.getLong(FIELD_ANKETA_ID);
+            String name = profile.getString(FIELD_NAME);
+            String login = profile.getString(FIELD_LOGIN);
+            return new AuthData(anketaId, name, login, secret);
         } catch (LogicException e) {
             e.printStackTrace();
         }

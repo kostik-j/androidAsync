@@ -52,7 +52,7 @@ public class MyApplication extends Application {
         mApiRequestManager.onAuth(new Callback<AuthData>() {
             @Override
             public void execute(AuthData result) {
-                getPreferenceProvider().setAnketaId(result.getAnketaId());
+            getPreferenceProvider().setAnketaId(result.getAnketaId());
             }
         });
 

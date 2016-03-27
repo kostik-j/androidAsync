@@ -28,10 +28,10 @@
     </plurals>
 
     <plurals name="contacts">
-        <item quantity="zero">0 константов</item>
+        <item quantity="zero">0 контактов</item>
         <item quantity="one">%1$d контакт</item>
         <item quantity="two">%1$d контакта</item>
-        <item quantity="few">%1$d контактов</item>
+        <item quantity="few">%1$d контакта</item>
         <item quantity="many">%1$d контактов</item>
         <item quantity="other">%1$d контакты</item>
     </plurals>
