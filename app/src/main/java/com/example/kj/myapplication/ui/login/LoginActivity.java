@@ -17,7 +17,7 @@ import com.example.kj.myapplication.R;
 public class LoginActivity extends AppCompatActivity
                 implements ILoginView {
 
-    ILoginPresenter mPresenter;
+    LoginPresenter mPresenter;
 
     // UI references.
     private EditText mLoginView;
@@ -52,6 +52,19 @@ public class LoginActivity extends AppCompatActivity
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mPresenter.isViewAttached()) {
+            mPresenter.attachView(this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        mPresenter.detachView();
+        super.onPause();
+    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void mShowProgress(final boolean show) {
@@ -68,8 +81,10 @@ public class LoginActivity extends AppCompatActivity
             });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            mProgressView.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -98,6 +113,11 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public Context getViewContext() {
         return this;
+    }
+
+    @Override
+    public void close() {
+        finish();
     }
 }
 

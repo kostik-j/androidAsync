@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@color/colorListViewBack"
+    tools:context="com.example.kj.myapplication.ui.contacts.ContactsActivity"
+    tools:showIn="@layout/activity_contacts">
+
+    <ListView
+        android:paddingTop="@dimen/listview_item_margin"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/listview_item_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lvAlbums" />
+
+</LinearLayout>

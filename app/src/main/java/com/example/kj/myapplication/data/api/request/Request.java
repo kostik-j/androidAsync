@@ -1,16 +1,14 @@
 package com.example.kj.myapplication.data.api.request;
 
-import com.example.kj.myapplication.data.api.parser.Parser;
-import com.example.kj.myapplication.entity.AuthData;
-import com.example.kj.myapplication.entity.SidToken;
+import com.example.kj.myapplication.data.api.ApiErrorException;
+import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 
 public abstract class Request<T> {
-    private SidToken mSid;
 
     /**
      * Парсер разбирает json и возвращает модель, либо ошибку
      */
-    private Parser<T> mParser;
+    private JsonBaseParser<T> mJsonBaseParser;
 
     /**
      * Загружаем данные из сети
@@ -18,32 +16,22 @@ public abstract class Request<T> {
      */
     protected abstract String getData();
 
-    public SidToken getSid() {
-        return mSid;
+    public JsonBaseParser<T> getParser() {
+        return mJsonBaseParser;
     }
 
-    public void setSid(SidToken sid) {
-        this.mSid = sid;
+    public void setParser(JsonBaseParser<T> jsonBaseParser) {
+        mJsonBaseParser = jsonBaseParser;
     }
 
-    /**
-     * Идентификатор запроса использется для подписки
-     * @return String
-     */
-    public abstract String getName();
-
-    public Parser<T> getParser() {
-        return mParser;
-    }
-
-    public void setParser(Parser<T> parser) {
-        mParser = parser;
-    }
-
-    public T loadData() {
+    public T loadData() throws ApiErrorException {
         try {
             return getParser().parse(getData());
         } catch (Exception e) {
+            // ошибки впи пробрасываем дальше
+            if (e instanceof ApiErrorException) {
+                throw e;
+            }
             e.printStackTrace();
         }
         return null;

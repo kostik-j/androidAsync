@@ -3,7 +3,7 @@ package com.example.kj.myapplication.data.api.request;
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
 import com.example.kj.myapplication.core.NetworkRequest;
 import com.example.kj.myapplication.entity.SecretToken;
-import com.example.kj.myapplication.data.api.parser.Parser;
+import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.AuthData;
 
 import org.json.JSONException;
@@ -15,14 +15,9 @@ public class SecretAuthRequest extends Request<AuthData> {
     MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
     NetworkRequest networkRequest = new NetworkRequest();
 
-    public SecretAuthRequest(SecretToken secretToken, Parser<AuthData> parser) {
+    public SecretAuthRequest(SecretToken secretToken, JsonBaseParser<AuthData> jsonBaseParser) {
         mSecretToken = secretToken;
-        setParser(parser);
-    }
-
-    @Override
-    public String getName() {
-        return "SecretAuthRequest";
+        setParser(jsonBaseParser);
     }
 
     private JSONObject getPostJsonData(SecretToken authIdentity) {

@@ -1,10 +1,10 @@
 package com.example.kj.myapplication.data.local;
 
-import com.example.kj.myapplication.entity.AuthData;
+import com.example.kj.myapplication.entity.SecretToken;
 
 public interface IPreferenceProvider {
-
-    AuthData getAuthData();
-
-    void setAuthData(AuthData authData);
+    void setSecretToken(SecretToken secretToken);
+    SecretToken getSecretToken();
+    long getAnketaId();
+    void setAnketaId(long anketaId);
 }

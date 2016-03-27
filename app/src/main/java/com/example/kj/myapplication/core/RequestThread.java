@@ -2,10 +2,11 @@ package com.example.kj.myapplication.core;
 
 import android.os.Handler;
 
+import com.example.kj.myapplication.data.api.ApiErrorException;
 import com.example.kj.myapplication.data.api.request.Request;
+import com.example.kj.myapplication.entity.ApiError;
 
 public class RequestThread extends Thread{
-    final public static String NAME = "";
     private Request mRequest;
 
     private EventDispatcher mEventDispatcher;
@@ -20,12 +21,22 @@ public class RequestThread extends Thread{
 
     @Override
     public void run() {
-        final Object data = mRequest.loadData();
-        final String name = mRequest.getName();
+        final Object data;
+        try {
+            final String name = mRequest.getClass().getSimpleName();
+            data = mRequest.loadData();
+            mMainHandler.post(new Runnable() {
+                @Override
+                public void run() { mEventDispatcher.dispatch(name, data); }
+            });
+        } catch (ApiErrorException e) {
+            // TODO: 26.03.16 "api.error" перенести константу куданить
+            final ApiError errorObject = new ApiError(e.getErrorCode());
+            mMainHandler.post(new Runnable() {
+                @Override
+                public void run() { mEventDispatcher.dispatch("api.error", errorObject); }
+            });
+        }
 
-        mMainHandler.post(new Runnable() {
-            @Override
-            public void run() { mEventDispatcher.dispatch(name, data); }
-        });
     }
 }

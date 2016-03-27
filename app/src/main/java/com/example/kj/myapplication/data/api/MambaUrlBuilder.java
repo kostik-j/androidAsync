@@ -30,9 +30,27 @@ public class MambaUrlBuilder {
         return null;
     }
 
-    public URL getProfile() {
+    public URL getAllContacts() {
         try {
-            return new URL(mBaseUrl + "profile/");
+            return new URL(mBaseUrl + "contacts/all/");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public URL getAnketa(long anketaId) {
+        try {
+            return new URL(mBaseUrl + "users/" + String.valueOf(anketaId) + "/");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public URL getAbums(long anketaId) {
+        try {
+            return new URL(mBaseUrl + "users/" + String.valueOf(anketaId) + "/albums/");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

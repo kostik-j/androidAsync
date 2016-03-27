@@ -3,9 +3,9 @@ package com.example.kj.myapplication.entity;
 final public class SecretToken {
     private String mSecret;
 
-    public SecretToken(String secret) throws Exception {
+    public SecretToken(String secret) throws LogicException {
         if (secret.isEmpty()) {
-            throw new Exception("Empty secret");
+            throw new LogicException("Empty secret");
         }
         mSecret = secret;
     }

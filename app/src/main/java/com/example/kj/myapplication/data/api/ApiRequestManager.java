@@ -5,74 +5,42 @@ import android.os.Handler;
 import com.example.kj.myapplication.core.Callback;
 import com.example.kj.myapplication.core.EventDispatcher;
 import com.example.kj.myapplication.core.RequestThread;
-import com.example.kj.myapplication.data.local.PreferenceProvider;
+import com.example.kj.myapplication.data.api.parser.JsonAlbumsParser;
+import com.example.kj.myapplication.data.api.parser.JsonContactsParser;
+import com.example.kj.myapplication.data.api.request.AlbumsRequest;
+import com.example.kj.myapplication.data.api.request.ContactsRequest;
+import com.example.kj.myapplication.data.local.IPreferenceProvider;
+import com.example.kj.myapplication.entity.Album;
+import com.example.kj.myapplication.entity.ApiError;
 import com.example.kj.myapplication.entity.AuthIdentity;
-import com.example.kj.myapplication.entity.Profile;
+import com.example.kj.myapplication.entity.Anketa;
+import com.example.kj.myapplication.entity.Contact;
 import com.example.kj.myapplication.entity.SecretToken;
 import com.example.kj.myapplication.data.api.parser.JsonAuthParser;
-import com.example.kj.myapplication.data.api.parser.JsonProfileParser;
+import com.example.kj.myapplication.data.api.parser.JsonAnketaParser;
 import com.example.kj.myapplication.data.api.request.LoginPassAuthRequest;
-import com.example.kj.myapplication.data.api.request.ProfileRequest;
+import com.example.kj.myapplication.data.api.request.AnketaRequest;
 import com.example.kj.myapplication.data.api.request.Request;
 import com.example.kj.myapplication.data.api.request.SecretAuthRequest;
 import com.example.kj.myapplication.entity.AuthData;
-import com.example.kj.myapplication.entity.SidToken;
+
+import java.util.ArrayList;
 
 public class ApiRequestManager {
     private EventDispatcher mEventDispatcher;
     private Handler mMainHandler;
-    private PreferenceProvider mPreferenceProvider;
-
-    private SidToken mSidToken;
-    private SecretToken mSecretToken;
+    private IPreferenceProvider mPreferenceProvider;
 
     public ApiRequestManager(
             EventDispatcher eventDispatcher,
             Handler mainHandler,
-            PreferenceProvider preferenceProvider
+            IPreferenceProvider preferenceProvider
     ) {
         mMainHandler = mainHandler;
         mEventDispatcher = eventDispatcher;
         mPreferenceProvider = preferenceProvider;
-        init();
     }
 
-    /**
-     * @todo: перенести в auth manager
-     */
-    private void init() {
-        mSidToken = mPreferenceProvider.getSidToken();
-        mSecretToken = mPreferenceProvider.getSecretToken();
-
-        onAuth(new Callback<AuthData>() {
-            @Override
-            public void execute(AuthData i) {
-                if (i == null) {
-                    ApiRequestManager.this.setSidToken(null);
-                    ApiRequestManager.this.setSecretToken(null);
-                } else {
-                    ApiRequestManager.this.setSidToken(i.getSid());
-                    ApiRequestManager.this.setSecretToken(i.getSecret());
-                }
-            }
-        });
-    }
-
-    private SecretToken getSecretToken() {
-        return mSecretToken;
-    }
-
-    private void setSecretToken(SecretToken secretToken) {
-        mPreferenceProvider.setSecretToken(secretToken);
-    }
-
-    private SidToken getSidToken() {
-        return mSidToken;
-    }
-
-    private void setSidToken(SidToken sidToken) {
-        mPreferenceProvider.setSidToken(sidToken);
-    }
 
     private RequestThread buildThread(Request request) {
         return new RequestThread(request, mEventDispatcher, mMainHandler);
@@ -87,16 +55,14 @@ public class ApiRequestManager {
         buildThread(request).start();
     }
 
-    public void getProfile() {
-        ProfileRequest request = new ProfileRequest(new JsonProfileParser());
-        request.setSid(getSidToken());
+    public void getAnketa(long anketaId) {
+        AnketaRequest request = new AnketaRequest(anketaId, new JsonAnketaParser());
         buildThread(request).start();
     }
 
-    public int onGetProfile(Callback<Profile> callback) {
-        return mEventDispatcher.subscribe(ProfileRequest.class.getSimpleName(), callback);
+    public int onGetAnketa(Callback<Anketa> callback) {
+        return mEventDispatcher.subscribe(AnketaRequest.class.getSimpleName(), callback);
     }
-
 
     public void authBySecret(SecretToken secretToken) {
         SecretAuthRequest request = new SecretAuthRequest(secretToken, new JsonAuthParser());
@@ -107,11 +73,31 @@ public class ApiRequestManager {
         return mEventDispatcher.subscribe(SecretAuthRequest.class.getSimpleName(), callback);
     }
 
-    public void setmSidToken(SidToken sidToken) {
-        this.mSidToken = sidToken;
-    }
-
     public void unbindCallback(int id) {
         mEventDispatcher.unsubcribe(id);
+    }
+
+    final static public String errorEventName = "api.error";
+
+    public int onApiError(Callback<ApiError> callback) {
+        return mEventDispatcher.subscribe(errorEventName, callback);
+    }
+
+    public void getContacts() {
+        ContactsRequest request = new ContactsRequest(new JsonContactsParser());
+        buildThread(request).start();
+    }
+
+    public int onGetContacts(Callback<ArrayList<Contact>> callback) {
+        return mEventDispatcher.subscribe(ContactsRequest.class.getSimpleName(), callback);
+    }
+
+    public void getAlbums(long anketaId) {
+        AlbumsRequest request = new AlbumsRequest(anketaId, new JsonAlbumsParser());
+        buildThread(request).start();
+    }
+
+    public int onGetAlbums(Callback<ArrayList<Album>> callback) {
+        return mEventDispatcher.subscribe(AlbumsRequest.class.getSimpleName(), callback);
     }
 }

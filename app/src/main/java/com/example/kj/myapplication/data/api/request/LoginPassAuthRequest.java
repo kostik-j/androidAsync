@@ -3,7 +3,7 @@ package com.example.kj.myapplication.data.api.request;
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
 import com.example.kj.myapplication.core.NetworkRequest;
 import com.example.kj.myapplication.entity.AuthIdentity;
-import com.example.kj.myapplication.data.api.parser.Parser;
+import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.AuthData;
 
 import org.json.JSONException;
@@ -15,14 +15,9 @@ public class LoginPassAuthRequest extends Request<AuthData> {
     MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
     NetworkRequest networkRequest = new NetworkRequest();
 
-    public LoginPassAuthRequest(AuthIdentity authIdentity, Parser<AuthData> parser) {
+    public LoginPassAuthRequest(AuthIdentity authIdentity, JsonBaseParser<AuthData> jsonBaseParser) {
         mAuthIdentity = authIdentity;
-        setParser(parser);
-    }
-
-    @Override
-    public String getName() {
-        return "LoginPassAuthRequest";
+        setParser(jsonBaseParser);
     }
 
     private JSONObject getPostJsonData(AuthIdentity authIdentity) {

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="age">
+        <item quantity="zero">не указан</item>
+        <item quantity="one">%1$d год</item>
+        <item quantity="two">%1$d года</item>
+        <item quantity="few">%1$d года</item>
+        <item quantity="many">%1$d лет</item>
+        <item quantity="other">%1$d лет</item>
+    </plurals>
+
+    <plurals name="messages">
+        <item quantity="zero">нет сообщений</item>
+        <item quantity="one">%1$d сообщение</item>
+        <item quantity="two">%1$d сообщения</item>
+        <item quantity="few">%1$d сообщения</item>
+        <item quantity="many">%1$d сообщений</item>
+        <item quantity="other">%1$d сообщения</item>
+    </plurals>
+
+    <plurals name="albums">
+        <item quantity="zero">нет альбомов</item>
+        <item quantity="one">%1$d альбом</item>
+        <item quantity="two">%1$d альбома</item>
+        <item quantity="few">%1$d альбома</item>
+        <item quantity="many">%1$d альбомов</item>
+        <item quantity="other">%1$d альбома</item>
+    </plurals>
+
+    <plurals name="contacts">
+        <item quantity="zero">0 константов</item>
+        <item quantity="one">%1$d контакт</item>
+        <item quantity="two">%1$d контакта</item>
+        <item quantity="few">%1$d контактов</item>
+        <item quantity="many">%1$d контактов</item>
+        <item quantity="other">%1$d контакты</item>
+    </plurals>
+</resources>

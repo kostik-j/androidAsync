@@ -19,7 +19,7 @@ android {
     }
 
     buildTypes.each {
-        it.buildConfigField 'String', 'BASE_URL', '"http://api.mobile-api.ru/v5.2.1.1/"'
+        it.buildConfigField 'String', 'BASE_URL', '"http://api.mobile-api.ru/v5.2.26.1/"'
     }
 }
 
@@ -28,4 +28,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:support-v4:23.1.1'
 }
