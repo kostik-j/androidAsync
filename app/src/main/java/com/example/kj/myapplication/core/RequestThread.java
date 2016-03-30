@@ -3,6 +3,7 @@ package com.example.kj.myapplication.core;
 import android.os.Handler;
 
 import com.example.kj.myapplication.data.api.ApiErrorException;
+import com.example.kj.myapplication.data.api.ApiEvents;
 import com.example.kj.myapplication.data.api.request.Request;
 import com.example.kj.myapplication.entity.ApiError;
 
@@ -27,6 +28,12 @@ public class RequestThread extends Thread{
             data = mRequest.loadData();
             mMainHandler.post(new Runnable() {
                 @Override
+                public void run() {
+                    mEventDispatcher.dispatch(ApiEvents.ERROR_UPDATE_COOKIE, mRequest.getCookie());
+                }
+            });
+            mMainHandler.post(new Runnable() {
+                @Override
                 public void run() { mEventDispatcher.dispatch(name, data); }
             });
         } catch (ApiErrorException e) {
@@ -34,7 +41,7 @@ public class RequestThread extends Thread{
             final ApiError errorObject = new ApiError(e.getErrorCode(), e.getMessage());
             mMainHandler.post(new Runnable() {
                 @Override
-                public void run() { mEventDispatcher.dispatch("api.error", errorObject); }
+                public void run() { mEventDispatcher.dispatch(ApiEvents.ERROR_EVENT, errorObject); }
             });
         }
 

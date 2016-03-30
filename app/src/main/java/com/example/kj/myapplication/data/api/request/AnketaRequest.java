@@ -12,7 +12,6 @@ import java.net.URL;
 public class AnketaRequest extends Request<Anketa> {
 
     private MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
-    private NetworkRequest networkRequest = new NetworkRequest();
     private long mAnketaId;
 
     public AnketaRequest(long anketaId, JsonBaseParser<Anketa> jsonBaseParser) {
@@ -29,7 +28,7 @@ public class AnketaRequest extends Request<Anketa> {
             e.printStackTrace();
         }
 
-        return networkRequest.makeGetRequest(url);
+        return getNetworkRequest().makeGetRequest(url);
     }
 }
 

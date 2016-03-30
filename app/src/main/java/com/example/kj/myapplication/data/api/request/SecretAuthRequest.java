@@ -13,7 +13,6 @@ public class SecretAuthRequest extends Request<AuthData> {
 
     SecretToken mSecretToken;
     MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
-    NetworkRequest networkRequest = new NetworkRequest();
 
     public SecretAuthRequest(SecretToken secretToken, JsonBaseParser<AuthData> jsonBaseParser) {
         mSecretToken = secretToken;
@@ -32,7 +31,7 @@ public class SecretAuthRequest extends Request<AuthData> {
 
     @Override
     protected String getData() {
-        return networkRequest.makePostRequest(
+        return getNetworkRequest().makePostRequest(
                 mMambaUrlBuilder.getSecretLoginUrl(),
                 getPostJsonData(mSecretToken)
         );

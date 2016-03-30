@@ -25,11 +25,13 @@ import com.example.kj.myapplication.data.api.request.SecretAuthRequest;
 import com.example.kj.myapplication.entity.AuthData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ApiRequestManager {
     private EventDispatcher mEventDispatcher;
     private Handler mMainHandler;
     private IPreferenceProvider mPreferenceProvider;
+    private List<String> cookie;
 
     public ApiRequestManager(
             EventDispatcher eventDispatcher,
@@ -39,10 +41,24 @@ public class ApiRequestManager {
         mMainHandler = mainHandler;
         mEventDispatcher = eventDispatcher;
         mPreferenceProvider = preferenceProvider;
+
+        mEventDispatcher.subscribe(ApiEvents.ERROR_UPDATE_COOKIE, new Callback<List<String>>() {
+            @Override
+            public void execute(List<String> result) {
+                cookie = result;
+            }
+        });
+
+        onAuth(new Callback<AuthData>() {
+            @Override
+            public void execute(AuthData result) {
+                mPreferenceProvider.setSecretToken(result.getSecret());
+            }
+        });
     }
 
-
     private RequestThread buildThread(Request request) {
+        request.setCookie(cookie);
         return new RequestThread(request, mEventDispatcher, mMainHandler);
     }
 
@@ -50,54 +66,49 @@ public class ApiRequestManager {
         return mEventDispatcher.subscribe(LoginPassAuthRequest.class.getSimpleName(), callback);
     }
 
-    public void auth(AuthIdentity authIdentity) {
-        LoginPassAuthRequest request = new LoginPassAuthRequest(authIdentity, new JsonAuthParser());
-        buildThread(request).start();
-    }
-
-    public void getAnketa(long anketaId) {
-        AnketaRequest request = new AnketaRequest(anketaId, new JsonAnketaParser());
-        buildThread(request).start();
-    }
-
     public int onGetAnketa(Callback<Anketa> callback) {
         return mEventDispatcher.subscribe(AnketaRequest.class.getSimpleName(), callback);
-    }
-
-    public void authBySecret(SecretToken secretToken) {
-        SecretAuthRequest request = new SecretAuthRequest(secretToken, new JsonAuthParser());
-        buildThread(request).start();
-    }
-
-    public int onAuthBySecret(Callback<AuthData> callback) {
-        return mEventDispatcher.subscribe(SecretAuthRequest.class.getSimpleName(), callback);
-    }
-
-    public void unbindCallback(int id) {
-        mEventDispatcher.unsubcribe(id);
-    }
-
-    final static public String errorEventName = "api.error";
-
-    public int onApiError(Callback<ApiError> callback) {
-        return mEventDispatcher.subscribe(errorEventName, callback);
-    }
-
-    public void getContacts() {
-        ContactsRequest request = new ContactsRequest(new JsonContactsParser());
-        buildThread(request).start();
     }
 
     public int onGetContacts(Callback<ArrayList<Contact>> callback) {
         return mEventDispatcher.subscribe(ContactsRequest.class.getSimpleName(), callback);
     }
 
-    public void getAlbums(long anketaId) {
-        AlbumsRequest request = new AlbumsRequest(anketaId, new JsonAlbumsParser());
-        buildThread(request).start();
-    }
-
     public int onGetAlbums(Callback<ArrayList<Album>> callback) {
         return mEventDispatcher.subscribe(AlbumsRequest.class.getSimpleName(), callback);
+    }
+
+    public int onAuthBySecret(Callback<AuthData> callback) {
+        return mEventDispatcher.subscribe(SecretAuthRequest.class.getSimpleName(), callback);
+    }
+
+    public int onApiError(Callback<ApiError> callback) {
+        return mEventDispatcher.subscribe(ApiEvents.ERROR_EVENT, callback);
+    }
+
+    public void unbindCallback(int id) {
+        mEventDispatcher.unsubcribe(id);
+    }
+
+
+
+    public void auth(AuthIdentity authIdentity) {
+        buildThread(new LoginPassAuthRequest(authIdentity, new JsonAuthParser())).start();
+    }
+
+    public void getAnketa(long anketaId) {
+        buildThread(new AnketaRequest(anketaId, new JsonAnketaParser())).start();
+    }
+
+    public void authBySecret(SecretToken secretToken) {
+        buildThread(new SecretAuthRequest(secretToken, new JsonAuthParser())).start();
+    }
+
+    public void getContacts() {
+        buildThread(new ContactsRequest(new JsonContactsParser())).start();
+    }
+
+    public void getAlbums(long anketaId) {
+        buildThread(new AlbumsRequest(anketaId, new JsonAlbumsParser())).start();
     }
 }

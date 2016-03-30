@@ -1,5 +1,6 @@
 package com.example.kj.myapplication.core;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,15 +16,27 @@ import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class NetworkRequest {
-
-    final String LOG_TAG = getClass().getSimpleName();
+    static final String LOG_TAG = NetworkRequest.class.getSimpleName();
     static final String COOKIES_HEADER = "Set-Cookie";
-    final static private CookieManager msCookieManager = new CookieManager();
+
+    private List<String> mCookie;
 
     public NetworkRequest() {}
+
+    public void setCookie(List<String> cookie) {
+        mCookie = cookie;
+    }
+
+    public List<String> getCookie() {
+        return mCookie;
+    }
 
     public String makePostRequest(URL url, JSONObject data) {
         return makeRequest(url, "POST", data);
@@ -43,13 +56,6 @@ public class NetworkRequest {
 
         try {
             connection = getConnection(url, method, data);
-
-            List<String> cookiesHeader = connection.getHeaderFields().get(COOKIES_HEADER);
-            if(cookiesHeader != null) {
-                for (String cookie : cookiesHeader) {
-                    msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-                }
-            }
 
             InputStream inputStream = connection.getInputStream();
             if (inputStream == null) {
@@ -93,11 +99,9 @@ public class NetworkRequest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(method);
 
-        synchronized (msCookieManager) {
-            if(msCookieManager.getCookieStore().getCookies().size() > 0) {
-                connection.setRequestProperty("Cookie",
-                        TextUtils.join(";", msCookieManager.getCookieStore().getCookies()));
-            }
+        // add cookie to reauest
+        if(mCookie != null && mCookie.size() > 0) {
+            connection.setRequestProperty("Cookie", TextUtils.join(";", mCookie));
         }
 
         switch (method) {
@@ -123,12 +127,15 @@ public class NetworkRequest {
 
         connection.connect();
 
-        synchronized (msCookieManager) {
-            List<String> cookiesHeader = connection.getHeaderFields().get(COOKIES_HEADER);
-            if(cookiesHeader != null) {
-                for (String cookie : cookiesHeader) {
-                    msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-                }
+        // Get Cookies form response header and save
+        List<String> cookiesHeader = connection.getHeaderFields().get(COOKIES_HEADER);
+        if(cookiesHeader != null) {
+            if (mCookie == null) {
+                mCookie = new ArrayList<>();
+            }
+            mCookie.clear();
+            for (String cookie : cookiesHeader) {
+                mCookie.add(HttpCookie.parse(cookie).get(0).toString());
             }
         }
 

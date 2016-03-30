@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class ContactsRequest extends Request<ArrayList<Contact>> {
 
     private MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
-    private NetworkRequest networkRequest = new NetworkRequest();
 
     public ContactsRequest(JsonBaseParser<ArrayList<Contact>> jsonBaseParser) {
         setParser(jsonBaseParser);
@@ -28,7 +27,7 @@ public class ContactsRequest extends Request<ArrayList<Contact>> {
             e.printStackTrace();
         }
 
-        return networkRequest.makeGetRequest(url);
+        return getNetworkRequest().makeGetRequest(url);
     }
 }
 

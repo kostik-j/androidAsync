@@ -1,7 +1,6 @@
 package com.example.kj.myapplication.data.api.request;
 
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
-import com.example.kj.myapplication.core.NetworkRequest;
 import com.example.kj.myapplication.entity.AuthIdentity;
 import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.AuthData;
@@ -13,7 +12,6 @@ public class LoginPassAuthRequest extends Request<AuthData> {
 
     AuthIdentity mAuthIdentity;
     MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
-    NetworkRequest networkRequest = new NetworkRequest();
 
     public LoginPassAuthRequest(AuthIdentity authIdentity, JsonBaseParser<AuthData> jsonBaseParser) {
         mAuthIdentity = authIdentity;
@@ -33,7 +31,7 @@ public class LoginPassAuthRequest extends Request<AuthData> {
 
     @Override
     protected String getData() {
-        return networkRequest.makePostRequest(
+        return getNetworkRequest().makePostRequest(
                 mMambaUrlBuilder.getLoginUrl(),
                 getPostJsonData(mAuthIdentity)
         );
