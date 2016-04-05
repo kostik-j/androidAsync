@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 final public class AnketaPresenter extends BasePresenter<IAnketaView> {
     private IPreferenceProvider mPreferenceProvider;
+    private long mAnketaId = 0;
 
     public AnketaPresenter(ApiRequestManager requestManager, IPreferenceProvider preferenceProvider) {
         super(requestManager);
@@ -31,6 +32,7 @@ final public class AnketaPresenter extends BasePresenter<IAnketaView> {
     public void loadAnketa(long id) {
         getView().showProgress();
         getRequestManager().getAnketa(id);
+        mAnketaId = id;
         if (isOwn(id)) {
             getRequestManager()
                 .getAlbums(id)
@@ -51,7 +53,7 @@ final public class AnketaPresenter extends BasePresenter<IAnketaView> {
             getRequestManager().onGetAnketa(new Callback<Anketa>() {
                 @Override
                 public void execute(Anketa result) {
-                    if (isViewAttached()) {
+                    if (isViewAttached() && mAnketaId == result.getId()) {
                         getView().hideProgress();
                         final boolean isOwnAnketa = isOwn(result.getId());
                         getView().showAnketa(result, isOwnAnketa);
