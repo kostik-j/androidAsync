@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
@@ -161,5 +162,10 @@ public class AnketaActivity extends AppCompatActivity
         Log.d(LOG_TAG, "showContactsCount: " + String.valueOf(count));
         mBtnContacts.setText(getResources().getQuantityString(R.plurals.contacts, count, count));
         mBtnContacts.setEnabled(count != 0);
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 }

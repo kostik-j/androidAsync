@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.widget.Toast;
 
-import com.example.kj.myapplication.core.BasePresenter;
+import com.example.kj.myapplication.core.MVP.BasePresenter;
 import com.example.kj.myapplication.core.Callback;
+import com.example.kj.myapplication.data.api.ApiErrorHelper;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
 import com.example.kj.myapplication.entity.ApiError;
@@ -27,20 +27,6 @@ public class SplashPresenter extends BasePresenter<ISplashView> {
     @Override
     protected void onViewAttached() {
         regSubscribe(
-            getRequestManager().onApiError(new Callback<ApiError>() {
-                @Override
-                public void execute(ApiError result) {
-                    // да да да константы это плохо
-                    if (result.getErrorCode() == 31) {
-                        Intent intent = new Intent(getView().getViewContext(), LoginActivity.class);
-                        ((SplashActivity) getView().getViewContext())
-                                .startActivityForResult(intent, ID);
-                    }
-                }
-            })
-        );
-
-        regSubscribe(
             getRequestManager().onAuth(new Callback<AuthData>() {
                 @Override
                 public void execute(AuthData result) {
@@ -50,6 +36,17 @@ public class SplashPresenter extends BasePresenter<ISplashView> {
         );
 
         getRequestManager().tryAuth();
+    }
+
+    @Override
+    public void onApiError(ApiError apiError) {
+        if (ApiErrorHelper.isAuthError(apiError)) {
+            Intent intent = new Intent(getView().getViewContext(), LoginActivity.class);
+            SplashActivity splashActivity = (SplashActivity) getView().getViewContext();
+            splashActivity.startActivityForResult(intent, ID);
+        } else {
+            super.onApiError(apiError);
+        }
     }
 
     private void showProfile() {

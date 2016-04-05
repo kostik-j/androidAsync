@@ -43,6 +43,11 @@ public class EventDispatcher {
         }
     }
 
+    /**
+     * @param event
+     * @param responseObject
+     * @return Количество подписчиков для события
+     */
     public void dispatch(String event, Object responseObject) {
         for (Map.Entry<Integer, Subscription> subscriptionEntry: mSubscriptions.entrySet()) {
             Subscription subscription = subscriptionEntry.getValue();

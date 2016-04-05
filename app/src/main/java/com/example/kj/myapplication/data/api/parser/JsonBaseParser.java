@@ -1,6 +1,7 @@
 package com.example.kj.myapplication.data.api.parser;
 
 import com.example.kj.myapplication.data.api.ApiErrorException;
+import com.example.kj.myapplication.data.api.ApiErrorHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +11,6 @@ abstract public class JsonBaseParser<T> implements Parser<T>{
     final String FIELD_ERRORS = "errors";
     final String FIELD_INTERNAL = "internal";
     final String FIELD_ERROR_CODE = "errorCode";
-    final int AUTH_ERROR_CODE = 31;
 
     private String getErrorMessage(JSONObject jsonObject) throws JSONException {
         if (jsonObject.has(FIELD_ERRORS)) {
@@ -34,7 +34,7 @@ abstract public class JsonBaseParser<T> implements Parser<T>{
             if (jsonObject.has(FIELD_ERROR_CODE)) {
                 errorCode = jsonObject.getInt(FIELD_ERROR_CODE);
             } else {
-                errorCode = isAuth ? errorCode : AUTH_ERROR_CODE;
+                errorCode = isAuth ? errorCode : ApiErrorHelper.AUTH_ERROR_CODE;
             }
 
             if (errorCode == 0) {

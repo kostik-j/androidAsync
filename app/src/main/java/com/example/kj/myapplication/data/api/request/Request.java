@@ -1,13 +1,11 @@
 package com.example.kj.myapplication.data.api.request;
 
-import com.example.kj.myapplication.core.NetworkRequest;
+import com.example.kj.myapplication.core.network.NetworkRequest;
 import com.example.kj.myapplication.data.api.ApiErrorException;
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
-import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.data.api.parser.Parser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Request<T> {
     /**
@@ -17,6 +15,7 @@ public abstract class Request<T> {
     private MambaUrlBuilder mUrlBuilder = new MambaUrlBuilder();
 
     private NetworkRequest mNetworkRequest;
+    private String mTag = "";
 
     public void setNetworkRequest(NetworkRequest networkRequest) {
         mNetworkRequest = networkRequest;
@@ -24,6 +23,14 @@ public abstract class Request<T> {
 
     protected NetworkRequest getNetworkRequest() {
         return mNetworkRequest;
+    }
+
+    public String getTag() {
+        return mTag;
+    }
+
+    public void setTag(String tag) {
+        mTag = tag;
     }
 
     /**
@@ -66,6 +73,9 @@ public abstract class Request<T> {
     public T loadData() throws ApiErrorException {
         try {
             String response = getData();
+            if (response == null) {
+                throw new ApiErrorException(0, new Throwable("Network error"));
+            }
             return getParser().parse(response);
         } catch (Exception e) {
             // ошибки впи пробрасываем дальше

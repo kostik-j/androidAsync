@@ -1,8 +1,9 @@
-package com.example.kj.myapplication.core;
+package com.example.kj.myapplication.core.network;
 
 import android.os.Handler;
 import android.util.Log;
 
+import com.example.kj.myapplication.core.EventDispatcher;
 import com.example.kj.myapplication.data.api.ApiErrorException;
 import com.example.kj.myapplication.data.api.ApiEvents;
 import com.example.kj.myapplication.data.api.request.Request;
@@ -44,16 +45,22 @@ public class RequestThread extends Thread{
                 });
             }
         } catch (ApiErrorException e) {
-            final ApiError errorObject = new ApiError(e.getErrorCode(), e.getMessage());
-            Log.d(LOG_TAG, String.format(
-                "Api error: code='%d' message='%s' eventName='%s')",
+            final ApiError errorObject = new ApiError(
                 e.getErrorCode(),
                 e.getMessage(),
-                name
+                mRequest.getTag()
+            );
+
+            Log.d(LOG_TAG, String.format(
+                "Api error: code='%d' message='%s' eventName='%s')",
+                e.getErrorCode(), e.getMessage(), name
             ));
+
             mMainHandler.post(new Runnable() {
                 @Override
-                public void run() { mEventDispatcher.dispatch(ApiEvents.ERROR_EVENT, errorObject); }
+                public void run() {
+                    mEventDispatcher.dispatch(ApiEvents.ERROR_EVENT, errorObject);
+                }
             });
         }
 

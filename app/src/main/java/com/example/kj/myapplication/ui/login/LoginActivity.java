@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
@@ -118,5 +119,9 @@ public class LoginActivity extends AppCompatActivity
         setResult(resultCode);
         finish();
     }
-}
 
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+}

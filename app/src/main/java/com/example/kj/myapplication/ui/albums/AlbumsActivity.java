@@ -1,6 +1,7 @@
 package com.example.kj.myapplication.ui.albums;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
 import com.example.kj.myapplication.entity.Album;
+import com.example.kj.myapplication.ui.splash.SplashActivity;
 
 import java.util.ArrayList;
 
@@ -54,6 +56,7 @@ public class AlbumsActivity extends AppCompatActivity
         lv.setAdapter(mAdapter);
 
         mFloatingActionButton.setOnClickListener(this);
+        startActivity(new Intent(this, SplashActivity.class));
     }
 
     @Override
@@ -93,7 +96,7 @@ public class AlbumsActivity extends AppCompatActivity
         mAdapter.addAll(albums);
 
         mToolbar.setTitle(
-            getResources().getQuantityString(R.plurals.albums, albums.size(), albums.size())
+                getResources().getQuantityString(R.plurals.albums, albums.size(), albums.size())
         );
     }
 
@@ -115,7 +118,17 @@ public class AlbumsActivity extends AppCompatActivity
     }
 
     @Override
+    public void showErrorCreateAlbum(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public Context getViewContext() {
         return this;
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 }

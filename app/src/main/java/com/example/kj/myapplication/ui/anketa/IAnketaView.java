@@ -1,6 +1,6 @@
 package com.example.kj.myapplication.ui.anketa;
 
-import com.example.kj.myapplication.core.IMvpView;
+import com.example.kj.myapplication.core.MVP.IMvpView;
 import com.example.kj.myapplication.entity.Anketa;
 
 interface  IAnketaView extends IMvpView {

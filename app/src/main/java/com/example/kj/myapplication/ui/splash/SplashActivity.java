@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
 
-public class SplashActivity extends AppCompatActivity implements ISplashView {
+public class SplashActivity extends AppCompatActivity
+        implements ISplashView {
 
     SplashPresenter mPresenter;
 
@@ -52,5 +54,10 @@ public class SplashActivity extends AppCompatActivity implements ISplashView {
     @Override
     public void close() {
         finish();
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 }

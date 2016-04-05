@@ -3,8 +3,9 @@ package com.example.kj.myapplication;
 import android.app.Application;
 import android.os.Handler;
 
-import com.example.kj.myapplication.core.BasePresenter;
+import com.example.kj.myapplication.core.MVP.BasePresenter;
 import com.example.kj.myapplication.core.Callback;
+import com.example.kj.myapplication.core.network.NetworkUtils;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.core.EventDispatcher;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
@@ -46,7 +47,11 @@ public class MyApplication extends Application {
     public ApiRequestManager getApiRequestManager() {
         if (mApiRequestManager == null) {
             mApiRequestManager = new ApiRequestManager(
-                    getEventBus(), new Handler(getMainLooper()), getPreferenceProvider());
+                    getEventBus(),
+                    new Handler(getMainLooper()),
+                    getPreferenceProvider(),
+                    new NetworkUtils(getApplicationContext())
+            );
         }
 
         mApiRequestManager.onAuth(new Callback<AuthData>() {

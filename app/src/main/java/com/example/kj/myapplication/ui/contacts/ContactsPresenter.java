@@ -6,15 +6,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.kj.myapplication.R;
-import com.example.kj.myapplication.core.BasePresenter;
+import com.example.kj.myapplication.core.MVP.BasePresenter;
 import com.example.kj.myapplication.core.Callback;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.entity.Contact;
 import com.example.kj.myapplication.entity.ContactCollection;
 
-final public class ContactsPresenter
-        extends BasePresenter<IContactsView>
-        implements Callback<ContactCollection> {
+final public class ContactsPresenter extends BasePresenter<IContactsView> {
 
     final static String LOG_TAG = ContactsPresenter.class.getSimpleName();
 
@@ -37,38 +35,35 @@ final public class ContactsPresenter
         super(requestManager);
     }
 
-    /**
-     * Пришли загруженые данные
-     * @param result
-     */
-    @Override
-    public void execute(ContactCollection result) {
-        if (!isViewAttached()) {
-            return;
-        }
-        // страница которая пришла
-        int page = (result.getOffset() / pageSize) + 1;
-        boolean isFirstPage = page == 1;
-
-        // проверим что нам пришло то что ждали
-        if (page != pageLoaded + 1) {
-            return;
-        }
-        // если это первый запрос контактов
-        if (isFirstPage) {
-            getView().showContacts(result.getContacts());
-            getView().setTitle(result.getTotalCount());
-            getView().hideProgress();
-            mTotalCount = result.getTotalCount();
-        } else {
-            getView().appendContacts(result.getContacts());
-        }
-        ++pageLoaded;
-    }
-
     @Override
     protected void onViewAttached() {
-        regSubscribe(getRequestManager().onGetContacts(this));
+        regSubscribe(getRequestManager().onGetContacts(new Callback<ContactCollection>() {
+            @Override
+            public void execute(ContactCollection result) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                // страница которая пришла
+                int page = (result.getOffset() / pageSize) + 1;
+                boolean isFirstPage = page == 1;
+
+                // проверим что нам пришло то что ждали
+                if (page != pageLoaded + 1) {
+                    return;
+                }
+                // если это первый запрос контактов
+                if (isFirstPage) {
+                    getView().showContacts(result.getContacts());
+                    getView().setTitle(result.getTotalCount());
+                    getView().hideProgress();
+                    mTotalCount = result.getTotalCount();
+                } else {
+                    getView().appendContacts(result.getContacts());
+                }
+                ++pageLoaded;
+            }
+
+        }));
         if (pageLoaded == 0) {
             loadNextPage();
             getView().showProgress();

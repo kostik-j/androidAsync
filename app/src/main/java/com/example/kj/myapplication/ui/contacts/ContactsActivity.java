@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
@@ -115,11 +116,10 @@ public class ContactsActivity extends AppCompatActivity
 
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        Contact contact = (Contact)parent.getItemAtPosition(position);
-//        mPresenter.onContactClick(contact);
-//    }
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public Context getViewContext() {

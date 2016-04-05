@@ -1,13 +1,13 @@
 package com.example.kj.myapplication.data.api;
 
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.kj.myapplication.core.Callback;
 import com.example.kj.myapplication.core.EventDispatcher;
-import com.example.kj.myapplication.core.NetworkRequest;
-import com.example.kj.myapplication.core.RequestThread;
+import com.example.kj.myapplication.core.network.NetworkRequest;
+import com.example.kj.myapplication.core.network.NetworkUtils;
+import com.example.kj.myapplication.core.network.RequestThread;
 import com.example.kj.myapplication.data.api.request.AlbumsRequest;
 import com.example.kj.myapplication.data.api.request.ContactsRequest;
 import com.example.kj.myapplication.data.api.request.CreateAlbumRequest;
@@ -17,7 +17,6 @@ import com.example.kj.myapplication.entity.Album;
 import com.example.kj.myapplication.entity.ApiError;
 import com.example.kj.myapplication.entity.AuthIdentity;
 import com.example.kj.myapplication.entity.Anketa;
-import com.example.kj.myapplication.entity.Contact;
 import com.example.kj.myapplication.data.api.request.LoginPassAuthRequest;
 import com.example.kj.myapplication.data.api.request.AnketaRequest;
 import com.example.kj.myapplication.data.api.request.Request;
@@ -25,10 +24,7 @@ import com.example.kj.myapplication.entity.AuthData;
 import com.example.kj.myapplication.entity.ContactCollection;
 import com.example.kj.myapplication.entity.SecretToken;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class ApiRequestManager {
     private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
@@ -36,15 +32,18 @@ public class ApiRequestManager {
     private EventDispatcher mEventDispatcher;
     private Handler mMainHandler;
     private IPreferenceProvider mPreferenceProvider;
+    private NetworkUtils mNetworkUtils;
 
     public ApiRequestManager(
             EventDispatcher eventDispatcher,
             Handler mainHandler,
-            IPreferenceProvider preferenceProvider
+            IPreferenceProvider preferenceProvider,
+            NetworkUtils networkUtils
     ) {
         mMainHandler = mainHandler;
         mEventDispatcher = eventDispatcher;
         mPreferenceProvider = preferenceProvider;
+        mNetworkUtils = networkUtils;
 
         mEventDispatcher.subscribe(ApiEvents.ERROR_UPDATE_COOKIE, new Callback<ArrayList<String>>() {
             @Override
@@ -55,10 +54,15 @@ public class ApiRequestManager {
         });
     }
 
-    private RequestThread buildThread(Request request) {
-        request.setNetworkRequest(new NetworkRequest());
-        request.setCookie(mPreferenceProvider.getCookie());
-        return new RequestThread(request, mEventDispatcher, mMainHandler);
+    private void runRequest(Request request, String tag) {
+        if (mNetworkUtils.hasConnection()) {
+            request.setNetworkRequest(new NetworkRequest());
+            request.setCookie(mPreferenceProvider.getCookie());
+            request.setTag(tag);
+
+            RequestThread thread = new RequestThread(request, mEventDispatcher, mMainHandler);
+            thread.start();
+        }
     }
 
     public int onAuth(Callback<AuthData> callback) {
@@ -94,18 +98,26 @@ public class ApiRequestManager {
      * Пробуем авторизоваться по сохраненным кукам и по секрету
      */
     public ApiRequestManager tryAuth() {
+        return tryAuth("");
+    }
+
+    public ApiRequestManager tryAuth(String tag) {
         SecretToken token = mPreferenceProvider.getSecretToken();
-        buildThread(new TryAuthRequest(token)).start();
+        runRequest(new TryAuthRequest(token), tag);
 
         return this;
     }
 
     /**
      * Авторизируемся по паре login/password
-     * @param authIdentity identity login/password
+     * @param identity identity login/password
      */
-    public ApiRequestManager auth(AuthIdentity authIdentity) {
-        buildThread(new LoginPassAuthRequest(authIdentity)).start();
+    public ApiRequestManager auth(AuthIdentity identity) {
+        return auth(identity, "") ;
+    }
+
+    public ApiRequestManager auth(AuthIdentity authIdentity, String tag) {
+        runRequest(new LoginPassAuthRequest(authIdentity), tag);
 
         return this;
     }
@@ -115,7 +127,11 @@ public class ApiRequestManager {
      * @param anketaId мамба id
      */
     public ApiRequestManager getAnketa(long anketaId) {
-        buildThread(new AnketaRequest(anketaId)).start();
+        return getAnketa(anketaId, "");
+    }
+
+    public ApiRequestManager getAnketa(long anketaId, String tag) {
+        runRequest(new AnketaRequest(anketaId), tag);
 
         return this;
     }
@@ -125,7 +141,11 @@ public class ApiRequestManager {
      * @param offset смещение от начала списка
      */
     public ApiRequestManager getContacts(int offset) {
-        buildThread(new ContactsRequest(offset)).start();
+        return getContacts(offset, "");
+    }
+
+    public ApiRequestManager getContacts(int offset, String tag) {
+        runRequest(new ContactsRequest(offset), tag);
 
         return this;
     }
@@ -136,7 +156,11 @@ public class ApiRequestManager {
      * @param limit количество загружаемых контактов
      */
     public ApiRequestManager getContacts(int offset, int limit) {
-        buildThread(new ContactsRequest(offset, limit)).start();
+        return getContacts(offset, limit, "");
+    }
+
+    public ApiRequestManager getContacts(int offset, int limit, String tag) {
+        runRequest(new ContactsRequest(offset, limit), tag);
 
         return this;
     }
@@ -146,7 +170,11 @@ public class ApiRequestManager {
      * @param anketaId мамба id
      */
     public ApiRequestManager getAlbums(long anketaId) {
-        buildThread(new AlbumsRequest(anketaId)).start();
+        return getAlbums(anketaId, "");
+    }
+
+    public ApiRequestManager getAlbums(long anketaId, String tag) {
+        runRequest(new AlbumsRequest(anketaId), tag);
 
         return this;
     }
@@ -156,7 +184,11 @@ public class ApiRequestManager {
      * @param name название нового альбома
      */
     public ApiRequestManager createAlbum(String name) {
-        buildThread(new CreateAlbumRequest(name)).start();
+        return createAlbum(name, "");
+    }
+
+    public ApiRequestManager createAlbum(String name, String tag) {
+        runRequest(new CreateAlbumRequest(name), tag);
 
         return this;
     }

@@ -1,6 +1,6 @@
 package com.example.kj.myapplication.ui;
 
-import com.example.kj.myapplication.core.BasePresenter;
+import com.example.kj.myapplication.core.MVP.BasePresenter;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
 import com.example.kj.myapplication.ui.albums.AlbumsPresenter;
