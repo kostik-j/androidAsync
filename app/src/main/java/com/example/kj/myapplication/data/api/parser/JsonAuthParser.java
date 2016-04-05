@@ -8,23 +8,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonAuthParser extends JsonBaseParser<AuthData> {
-    final String FIELD_IS_AUTH = "isAuth";
     final String FIELD_AUTH_SECRET = "authSecret";
     final String FIELD_PROFILE = "profile";
     final String FIELD_ANKETA_ID = "id";
-    final String FIELD_NAME = "name";
-    final String FIELD_LOGIN = "login";
 
     @Override
     protected AuthData mapResponseToObject(JSONObject object) throws JSONException {
         try {
-            String secretStr = object.getString(FIELD_AUTH_SECRET);
-            SecretToken secret = new SecretToken(secretStr);
+            SecretToken secret = null;
+            if (object.has(FIELD_AUTH_SECRET)) {
+                secret = new SecretToken(object.getString(FIELD_AUTH_SECRET));
+            }
+
             JSONObject profile = object.getJSONObject(FIELD_PROFILE);
             long anketaId = profile.getLong(FIELD_ANKETA_ID);
-            String name = profile.getString(FIELD_NAME);
-            String login = profile.getString(FIELD_LOGIN);
-            return new AuthData(anketaId, name, login, secret);
+            return new AuthData(anketaId, secret);
         } catch (LogicException e) {
             e.printStackTrace();
         }

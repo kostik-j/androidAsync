@@ -1,8 +1,8 @@
 package com.example.kj.myapplication.data.api.request;
 
-import com.example.kj.myapplication.data.api.MambaUrlBuilder;
+import com.example.kj.myapplication.data.api.ApiEvents;
+import com.example.kj.myapplication.data.api.parser.JsonAuthParser;
 import com.example.kj.myapplication.entity.AuthIdentity;
-import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.AuthData;
 
 import org.json.JSONException;
@@ -11,11 +11,10 @@ import org.json.JSONObject;
 public class LoginPassAuthRequest extends Request<AuthData> {
 
     AuthIdentity mAuthIdentity;
-    MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
 
-    public LoginPassAuthRequest(AuthIdentity authIdentity, JsonBaseParser<AuthData> jsonBaseParser) {
+    public LoginPassAuthRequest(AuthIdentity authIdentity) {
         mAuthIdentity = authIdentity;
-        setParser(jsonBaseParser);
+        setParser(new JsonAuthParser());
     }
 
     private JSONObject getPostJsonData(AuthIdentity authIdentity) {
@@ -30,9 +29,19 @@ public class LoginPassAuthRequest extends Request<AuthData> {
     }
 
     @Override
+    public String getEventName() {
+        return ApiEvents.REQUEST_AUTH;
+    }
+
+    @Override
+    public Boolean isPost() {
+        return true;
+    }
+
+    @Override
     protected String getData() {
         return getNetworkRequest().makePostRequest(
-                mMambaUrlBuilder.getLoginUrl(),
+                getUrlBuilder().getLoginUrl(),
                 getPostJsonData(mAuthIdentity)
         );
     }

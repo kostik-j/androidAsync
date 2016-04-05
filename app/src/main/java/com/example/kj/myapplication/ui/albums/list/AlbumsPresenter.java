@@ -21,28 +21,28 @@ final public class AlbumsPresenter extends BasePresenter<IAlbumsView> {
     }
 
     @Override
-    protected void init() {
+    protected void onViewAttached() {
         regSubscribe(
-                getRequestManager().onGetAlbums(new Callback<ArrayList<Album>>() {
+            getRequestManager().onGetAlbums(new Callback<ArrayList<Album>>() {
                     @Override
-                    public void execute(ArrayList<Album> result) {
-                        if (isViewAttached()) {
-                            getView().showAlbums(result);
-                            getView().hideProgress();
-                        }
-                    }
-                })
+                public void execute(ArrayList<Album> result) {
+                if (isViewAttached()) {
+                    getView().showAlbums(result);
+                    getView().hideProgress();
+                }
+                }
+            })
         );
         getView().showProgress();
         getRequestManager().getAlbums(mPreferenceProvider.getAnketaId());
 
         regSubscribe(
-                getRequestManager().onApiError(new Callback<ApiError>() {
+            getRequestManager().onApiError(new Callback<ApiError>() {
                     @Override
                     public void execute(ApiError result) {
-                        Log.d("asd", "asdasd");
+                Log.d("asd", "asdasd");
                     }
-                })
+            })
         );
     }
 }

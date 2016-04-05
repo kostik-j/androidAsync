@@ -2,6 +2,7 @@ package com.example.kj.myapplication.data.api.request;
 
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
 import com.example.kj.myapplication.core.NetworkRequest;
+import com.example.kj.myapplication.data.api.parser.JsonAnketaParser;
 import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.Anketa;
 
@@ -14,8 +15,8 @@ public class AnketaRequest extends Request<Anketa> {
     private MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
     private long mAnketaId;
 
-    public AnketaRequest(long anketaId, JsonBaseParser<Anketa> jsonBaseParser) {
-        setParser(jsonBaseParser);
+    public AnketaRequest(long anketaId) {
+        setParser(new JsonAnketaParser());
         mAnketaId = anketaId;
     }
 

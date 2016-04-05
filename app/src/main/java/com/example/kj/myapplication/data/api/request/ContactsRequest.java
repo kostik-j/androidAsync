@@ -1,33 +1,51 @@
 package com.example.kj.myapplication.data.api.request;
 
-import com.example.kj.myapplication.core.NetworkRequest;
-import com.example.kj.myapplication.data.api.MambaUrlBuilder;
 import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
+import com.example.kj.myapplication.data.api.parser.JsonContactsParser;
 import com.example.kj.myapplication.entity.Contact;
+import com.example.kj.myapplication.entity.ContactCollection;
 
-import java.net.MalformedURLException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URL;
 import java.util.ArrayList;
 
 
-public class ContactsRequest extends Request<ArrayList<Contact>> {
+public class ContactsRequest extends Request<ContactCollection> {
 
-    private MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
+    final private int DEFAULT_LIMIT = 20;
 
-    public ContactsRequest(JsonBaseParser<ArrayList<Contact>> jsonBaseParser) {
-        setParser(jsonBaseParser);
+    private int mLimit = 0;
+
+    private int mOffset = 0;
+
+    public ContactsRequest(int offset) {
+        init(offset, DEFAULT_LIMIT);
+    }
+
+    public ContactsRequest(int offset, int limit) {
+        init(offset, limit);
+    }
+
+    private void init(int offset, int limit) {
+        mOffset = offset;
+        mLimit = limit;
+        setParser(new JsonContactsParser(mOffset, mLimit));
     }
 
     @Override
     protected String getData() {
-        URL url = null;
+        URL url = getUrlBuilder().getAllContacts();
+        JSONObject data = new JSONObject();
         try {
-            url = new URL(mMambaUrlBuilder.getAllContacts().toString());
-        } catch (MalformedURLException e) {
+            data.put("limit", mLimit);
+            data.put("offset", mOffset);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return getNetworkRequest().makeGetRequest(url);
+        return getNetworkRequest().makeGetRequest(url, data);
     }
 }
 

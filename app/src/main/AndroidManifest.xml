@@ -15,9 +15,10 @@
             android:name=".ui.anketa.AnketaActivity"
             android:label=""
             android:launchMode="standard"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="mamba" />
@@ -27,12 +28,6 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:screenOrientation="portrait">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.contacts.ContactsActivity"
@@ -42,6 +37,15 @@
             android:name=".ui.albums.list.AlbumsActivity"
             android:label="@string/albums"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

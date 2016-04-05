@@ -8,6 +8,8 @@ import com.example.kj.myapplication.ui.albums.list.AlbumsPresenter;
 import com.example.kj.myapplication.ui.anketa.AnketaPresenter;
 import com.example.kj.myapplication.ui.contacts.ContactsPresenter;
 import com.example.kj.myapplication.ui.login.LoginPresenter;
+import com.example.kj.myapplication.ui.splash.SplashActivity;
+import com.example.kj.myapplication.ui.splash.SplashPresenter;
 
 public class PresenterFactory {
     ApiRequestManager mRequestManager;
@@ -22,6 +24,11 @@ public class PresenterFactory {
     }
 
     public BasePresenter getPresenter(String className) {
+
+        if (className.equals(SplashActivity.class.getSimpleName())) {
+            return new SplashPresenter(mRequestManager, mPreferenceProvider);
+        }
+
         if (className.equals(ContactsPresenter.class.getSimpleName())) {
             return new ContactsPresenter(mRequestManager);
         }

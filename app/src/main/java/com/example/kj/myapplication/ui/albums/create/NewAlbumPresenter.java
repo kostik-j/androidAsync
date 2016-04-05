@@ -16,7 +16,7 @@ final public class NewAlbumPresenter extends BasePresenter<INewAlbumView> {
     }
 
     @Override
-    protected void init() {
+    protected void onViewAttached() {
         getRequestManager().getAlbums(mPreferenceProvider.getAnketaId());
 
         regSubscribe(

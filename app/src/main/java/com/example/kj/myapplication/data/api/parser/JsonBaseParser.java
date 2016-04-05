@@ -10,30 +10,38 @@ abstract public class JsonBaseParser<T> {
     final String FIELD_ERRORS = "errors";
     final String FIELD_INTERNAL = "internal";
     final String FIELD_ERROR_CODE = "errorCode";
+    final int AUTH_ERROR_CODE = 31;
+
+    private String getErrorMessage(JSONObject jsonObject) throws JSONException {
+        if (jsonObject.has(FIELD_ERRORS)) {
+            JSONObject errObject = jsonObject.getJSONObject(FIELD_ERRORS);
+            if (errObject.has(FIELD_INTERNAL)) {
+                return errObject.getString(FIELD_INTERNAL);
+            }
+        }
+        return "";
+    }
+
+    protected Boolean isAuthMustHave = true;
 
     public T parse(String str) throws ApiErrorException {
-        int errorCode = -1;
+        int errorCode = 0;
+        boolean isAuth;
         String message = "";
         try {
             JSONObject jsonObject = new JSONObject(str);
-            boolean isAuth = jsonObject.getBoolean(FIELD_IS_AUTH);
-            if (!jsonObject.has(FIELD_ERROR_CODE) && isAuth) {
-                return mapResponseToObject(jsonObject);
-            }
-
-            if (jsonObject.has(FIELD_ERRORS)) {
-                JSONObject errObject = jsonObject.getJSONObject(FIELD_ERRORS);
-                if (errObject.has(FIELD_INTERNAL)) {
-                    message = errObject.getString(FIELD_INTERNAL);
-                }
-            }
-
-            // в лббой не понятной ситуации кидаем на авторизацию
+            isAuth = jsonObject.getBoolean(FIELD_IS_AUTH) || !isAuthMustHave;
             if (jsonObject.has(FIELD_ERROR_CODE)) {
                 errorCode = jsonObject.getInt(FIELD_ERROR_CODE);
             } else {
-                errorCode = isAuth ?errorCode : 31;
+                errorCode = isAuth ? errorCode : AUTH_ERROR_CODE;
             }
+
+            if (errorCode == 0) {
+                return mapResponseToObject(jsonObject);
+            }
+
+            message = getErrorMessage(jsonObject);
         } catch (Exception e) {
             e.printStackTrace();
         }

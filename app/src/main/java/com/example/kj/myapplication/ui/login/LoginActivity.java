@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
+import com.example.kj.myapplication.ui.splash.SplashActivity;
 
 public class LoginActivity extends AppCompatActivity
                 implements ILoginView {
@@ -43,15 +44,16 @@ public class LoginActivity extends AppCompatActivity
         findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            String login = mLoginView.getText().toString();
-            String password = mPasswordView.getText().toString();
+                String login = mLoginView.getText().toString();
+                String password = mPasswordView.getText().toString();
 
-            if (!login.isEmpty() && !password.isEmpty()) {
-                mPresenter.login(login, password);
-            }
+                if (!login.isEmpty() && !password.isEmpty()) {
+                    mPresenter.login(login, password);
+                }
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -107,16 +109,13 @@ public class LoginActivity extends AppCompatActivity
     }
 
     @Override
-    public void showError(String errorMessage) {
-    }
-
-    @Override
     public Context getViewContext() {
         return this;
     }
 
     @Override
-    public void close() {
+    public void close(int resultCode) {
+        setResult(resultCode);
         finish();
     }
 }

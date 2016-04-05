@@ -4,24 +4,30 @@ import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
 import com.example.kj.myapplication.entity.Contact;
+import com.example.kj.myapplication.entity.ContactCollection;
 
 import java.util.ArrayList;
 
 public class ContactsActivity extends AppCompatActivity
-        implements IContactsView, AdapterView.OnItemClickListener {
+        implements IContactsView, ContactsAdapter.Listener {
 
-    private ContactsPresenter mPresenter;
-    private ContactsAdapter mContactsAdapter;
     private Toolbar mToolbar;
+    private ContactsPresenter mPresenter;
+
+    private RecyclerView mRecyclerView;
+    private ContactsAdapter mContactsAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +50,40 @@ public class ContactsActivity extends AppCompatActivity
         MyApplication app = (MyApplication)getApplication();
         mPresenter = (ContactsPresenter)app.getPresenter(ContactsPresenter.class.getSimpleName());
         mPresenter.attachView(this);
-        mContactsAdapter = new ContactsAdapter(this);
-        ListView lv = (ListView) findViewById(R.id.lvContacts);
-        lv.setAdapter(mContactsAdapter);
-        lv.setOnItemClickListener(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rvContacts);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(this);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mContactsAdapter = new ContactsAdapter(this, this);
+        mRecyclerView.setAdapter(mContactsAdapter);
+    }
+
+    @Override
+    public void onReachedFloor() {
+        mPresenter.needMoreContacts(mContactsAdapter.getItemCount());
+    }
+
+    @Override
+    public void onShowDetailContact(Contact contact) {
+        mPresenter.onShowDetailContact(contact);
+    }
+
+    @Override
+    public void appendContacts(ArrayList<Contact> contacts) {
+        mContactsAdapter.addItems(contacts);
+    }
+
+    public void setTitle(int count) {
+        mToolbar.setTitle(
+            getResources().getQuantityString(R.plurals.contacts, count, count)
+        );
     }
 
     @Override
     public void showContacts(ArrayList<Contact> contacts) {
-        mToolbar.setTitle(
-            getResources().getQuantityString(R.plurals.contacts, contacts.size(), contacts.size())
-        );
-
-        mContactsAdapter.clear();
-        mContactsAdapter.addAll(contacts);
+        mContactsAdapter.replaceItems(contacts);
     }
 
     @Override
@@ -77,23 +103,23 @@ public class ContactsActivity extends AppCompatActivity
     @Override
     public void showProgress() {
         findViewById(R.id.layout_progress).setVisibility(View.VISIBLE);
-        findViewById(R.id.content).setVisibility(View.GONE);
+        findViewById(R.id.rvContacts).setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
         findViewById(R.id.layout_progress).setVisibility(View.GONE);
-        findViewById(R.id.content).setVisibility(View.VISIBLE);
+        findViewById(R.id.rvContacts).setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
 
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Contact contact = (Contact)parent.getItemAtPosition(position);
-        mPresenter.onContactClick(contact);
-    }
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        Contact contact = (Contact)parent.getItemAtPosition(position);
+//        mPresenter.onContactClick(contact);
+//    }
 
     @Override
     public Context getViewContext() {

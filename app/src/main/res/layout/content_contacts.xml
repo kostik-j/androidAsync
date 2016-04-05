@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:id="@+id/content"
-    android:background="@color/colorListViewBack"
+    android:id="@+id/rvContacts"
+    android:scrollbars="vertical"
+    android:padding="0dp"
     tools:context="com.example.kj.myapplication.ui.contacts.ContactsActivity"
-    tools:showIn="@layout/activity_contacts">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ListView
-        android:paddingTop="@dimen/listview_item_margin"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/listview_item_margin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/lvContacts" />
-
-</LinearLayout>
+</android.support.v7.widget.RecyclerView>

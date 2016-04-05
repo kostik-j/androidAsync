@@ -15,7 +15,5 @@ public interface ILoginView extends IMvpView {
     void hideProgress();
 
 
-    void close();
-
-    void showError(String errorMessage);
+    void close(int resultCode);
 }

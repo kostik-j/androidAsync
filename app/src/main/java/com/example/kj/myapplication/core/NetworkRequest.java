@@ -1,5 +1,6 @@
 package com.example.kj.myapplication.core;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -73,6 +74,7 @@ public class NetworkRequest {
             if (buffer.length() == 0) {
                 return null;
             }
+            Log.d(LOG_TAG, "RESPONSE " + buffer.toString());
             return buffer.toString();
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -96,33 +98,46 @@ public class NetworkRequest {
             throw new Exception("Unsupportable method");
 
         }
+
+        if (method.equals("GET") && data != null && data.length() != 0) {
+            Uri.Builder b = new Uri.Builder();
+            b.scheme(url.getProtocol());
+            b.authority(url.getAuthority());
+            b.path(url.getPath());
+            Iterator<String> iterator = data.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                String value = data.getString(key);
+                b.appendQueryParameter(key, value);
+            }
+            String s = b.build().toString();
+            url = new URL(s);
+        }
+
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(method);
 
-        // add cookie to reauest
-        if(mCookie != null && mCookie.size() > 0) {
-            connection.setRequestProperty("Cookie", TextUtils.join(";", mCookie));
-        }
+        Log.d(LOG_TAG, "REQUEST URL: " + method + " " + url.toString());
+        Log.d(LOG_TAG, "REQUEST DATA: " + (data == null ? "-" : data.toString()));
 
-        switch (method) {
-            case "POST":
-                String message = data.toString();
+        String cookieStr = mCookie != null ? TextUtils.join(";", mCookie) : "";
+        connection.setRequestProperty("Cookie", cookieStr);
+        Log.d(LOG_TAG, "REQUEST COOKIE: " + cookieStr);
 
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                connection.setFixedLengthStreamingMode(message.getBytes().length);
-                connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-                connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-                connection.connect();
-                //setup send
-                OutputStream os = new BufferedOutputStream(connection.getOutputStream());
-                os.write(message.getBytes());
-                //clean up
-                os.flush();
+        if (method.equals("POST")) {
+            String message = data != null ? data.toString() : "";
 
-                break;
-            case "GET":
-                break;
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setFixedLengthStreamingMode(message.getBytes().length);
+            connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            connection.connect();
+            //setup send
+            OutputStream os = new BufferedOutputStream(connection.getOutputStream());
+            os.write(message.getBytes());
+            //clean up
+            os.flush();
         }
 
         connection.connect();
@@ -137,6 +152,7 @@ public class NetworkRequest {
             for (String cookie : cookiesHeader) {
                 mCookie.add(HttpCookie.parse(cookie).get(0).toString());
             }
+            Log.d(LOG_TAG, "RESPONSE COOKIE: " + TextUtils.join(";", getCookie()));
         }
 
         return connection;

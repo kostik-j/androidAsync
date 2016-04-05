@@ -3,6 +3,7 @@ package com.example.kj.myapplication.data.local;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.kj.myapplication.entity.Anketa;
 import com.example.kj.myapplication.entity.AuthData;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PreferenceProvider implements IPreferenceProvider {
+    static final String LOG_TAG = PreferenceProvider.class.getSimpleName();
     final String SETTING_ANKETA_ID = "anketa_id";
     final String SETTING_SECRET = "secret";
     final String SETTING_COOKIE = "cookie";
@@ -54,7 +56,9 @@ public class PreferenceProvider implements IPreferenceProvider {
 
     @Override
     public void setCookie(@NonNull List<String> cookie) {
-        mSharedPreferences.edit().putString(SETTING_COOKIE, TextUtils.join(";", cookie)).apply();
+        String str = TextUtils.join(";", cookie);
+        mSharedPreferences.edit().putString(SETTING_COOKIE, str).apply();
+        Log.d(LOG_TAG, "Save Cookies" + str);
     }
 
     @Override
@@ -63,7 +67,7 @@ public class PreferenceProvider implements IPreferenceProvider {
         if (cookieStr.isEmpty()) {
             return null;
         }
-
+        Log.d(LOG_TAG, "Load Cookies" + cookieStr);
         return new ArrayList<>(Arrays.asList(TextUtils.split(cookieStr, ";")));
     }
 }

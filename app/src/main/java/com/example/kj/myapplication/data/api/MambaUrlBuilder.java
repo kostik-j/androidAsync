@@ -21,9 +21,9 @@ public class MambaUrlBuilder {
         return null;
     }
 
-    public URL getSessionUrl() {
+    public URL getProfileUrl() {
         try {
-            return new URL(mBaseUrl + "session/");
+            return new URL(mBaseUrl + "profile/");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

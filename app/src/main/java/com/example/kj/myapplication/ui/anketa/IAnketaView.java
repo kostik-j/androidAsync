@@ -21,7 +21,19 @@ interface  IAnketaView extends IMvpView {
      */
     void hideProgress();
 
-    void showButtons();
+    void showButtonsBlock();
+
+    /**
+     * убираем прелоадер с скнопки альбомов и показываем их количество
+     * @param count
+     */
+    void showAlbumsCount(int count);
+
+    /**
+     * убираем прелоадер с скнопки альбомов и показываем их количество
+     * @param count
+     */
+    void showContactsCount(int count);
 
     /**
      * аоказывает кнопку назад в тулбаре
