@@ -1,6 +1,8 @@
 package com.example.kj.myapplication.data.local;
 
 import com.example.kj.myapplication.entity.SecretToken;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IPreferenceProvider {
@@ -13,7 +15,7 @@ public interface IPreferenceProvider {
 
     void setAnketaId(long anketaId);
 
-    void setCookie(List<String> cookie);
+    void setCookie(ArrayList<String> cookie);
 
-    List<String> getCookie();
+    ArrayList<String> getCookie();
 }

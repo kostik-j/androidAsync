@@ -1,4 +1,4 @@
-package com.example.kj.myapplication.ui.albums.list;
+package com.example.kj.myapplication.ui.albums;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
@@ -16,8 +17,9 @@ import com.example.kj.myapplication.entity.Album;
 import java.util.ArrayList;
 
 public class AlbumsActivity extends AppCompatActivity
-        implements IAlbumsView {
+        implements IAlbumsView, NewAlbumDialogFragment.Listener, View.OnClickListener{
 
+    final String F_TAG = "newAlbum";
     private AlbumsPresenter mPresenter;
     private AlbumsAdapter mAdapter;
     private Toolbar mToolbar;
@@ -50,6 +52,25 @@ public class AlbumsActivity extends AppCompatActivity
         mAdapter = new AlbumsAdapter(this);
         ListView lv = (ListView) findViewById(R.id.lvAlbums);
         lv.setAdapter(mAdapter);
+
+        mFloatingActionButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mPresenter.onAddAlbumClick();
+    }
+
+    @Override
+    public void showNewAlbumDialog() {
+        (new NewAlbumDialogFragment())
+                .setListener(this)
+                .show(getSupportFragmentManager(), F_TAG);
+    }
+
+    @Override
+    public void onCreateAlbum(String name) {
+        mPresenter.createNewAlbum(name);
     }
 
     @Override

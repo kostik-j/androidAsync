@@ -4,14 +4,16 @@ import com.example.kj.myapplication.core.NetworkRequest;
 import com.example.kj.myapplication.data.api.ApiErrorException;
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
 import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
+import com.example.kj.myapplication.data.api.parser.Parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Request<T> {
     /**
      * Парсер разбирает json и возвращает модель, либо ошибку
      */
-    private JsonBaseParser<T> mJsonBaseParser;
+    private Parser<T> mJsonBaseParser;
     private MambaUrlBuilder mUrlBuilder = new MambaUrlBuilder();
 
     private NetworkRequest mNetworkRequest;
@@ -30,11 +32,11 @@ public abstract class Request<T> {
      */
     protected abstract String getData();
 
-    public void setCookie(List<String> cookie) {
+    public void setCookie(ArrayList<String> cookie) {
         mNetworkRequest.setCookie(cookie);
     }
 
-    public List<String> getCookie() {
+    public ArrayList<String> getCookie() {
         return mNetworkRequest.getCookie();
     }
 
@@ -42,11 +44,11 @@ public abstract class Request<T> {
         return mUrlBuilder;
     }
 
-    public JsonBaseParser<T> getParser() {
+    public Parser<T> getParser() {
         return mJsonBaseParser;
     }
 
-    public void setParser(JsonBaseParser<T> jsonBaseParser) {
+    public void setParser(Parser<T> jsonBaseParser) {
         mJsonBaseParser = jsonBaseParser;
     }
 

@@ -5,7 +5,7 @@ import com.example.kj.myapplication.data.api.ApiErrorException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-abstract public class JsonBaseParser<T> {
+abstract public class JsonBaseParser<T> implements Parser<T>{
     final String FIELD_IS_AUTH = "isAuth";
     final String FIELD_ERRORS = "errors";
     final String FIELD_INTERNAL = "internal";
@@ -43,6 +43,10 @@ abstract public class JsonBaseParser<T> {
 
             message = getErrorMessage(jsonObject);
         } catch (Exception e) {
+            // ошибки впи пробрасываем дальше
+            if (e instanceof ApiErrorException) {
+                throw new ApiErrorException(((ApiErrorException) e).getErrorCode(), new Throwable(e.getMessage()));
+            }
             e.printStackTrace();
         }
         throw new ApiErrorException(errorCode, new Throwable(message));
@@ -54,5 +58,5 @@ abstract public class JsonBaseParser<T> {
      * @return T
      * @throws JSONException
      */
-    abstract protected T mapResponseToObject(JSONObject object) throws JSONException;
+    abstract protected T mapResponseToObject(JSONObject object) throws JSONException, ApiErrorException;
 }

@@ -1,15 +1,13 @@
 package com.example.kj.myapplication.data.api.request;
 
-import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
+import com.example.kj.myapplication.data.api.ApiEvents;
 import com.example.kj.myapplication.data.api.parser.JsonContactsParser;
-import com.example.kj.myapplication.entity.Contact;
 import com.example.kj.myapplication.entity.ContactCollection;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 
 public class ContactsRequest extends Request<ContactCollection> {
@@ -28,6 +26,11 @@ public class ContactsRequest extends Request<ContactCollection> {
         init(offset, limit);
     }
 
+    @Override
+    public String getEventName() {
+        return ApiEvents.REQUEST_CONTACTS;
+    }
+
     private void init(int offset, int limit) {
         mOffset = offset;
         mLimit = limit;
@@ -36,7 +39,7 @@ public class ContactsRequest extends Request<ContactCollection> {
 
     @Override
     protected String getData() {
-        URL url = getUrlBuilder().getAllContacts();
+        URL url = getUrlBuilder().getAllContactsUrl();
         JSONObject data = new JSONObject();
         try {
             data.put("limit", mLimit);

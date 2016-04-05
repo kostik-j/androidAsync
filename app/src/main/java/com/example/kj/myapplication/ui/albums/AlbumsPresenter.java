@@ -1,13 +1,10 @@
-package com.example.kj.myapplication.ui.albums.list;
-
-import android.util.Log;
+package com.example.kj.myapplication.ui.albums;
 
 import com.example.kj.myapplication.core.BasePresenter;
 import com.example.kj.myapplication.core.Callback;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
 import com.example.kj.myapplication.entity.Album;
-import com.example.kj.myapplication.entity.ApiError;
 
 import java.util.ArrayList;
 
@@ -37,12 +34,21 @@ final public class AlbumsPresenter extends BasePresenter<IAlbumsView> {
         getRequestManager().getAlbums(mPreferenceProvider.getAnketaId());
 
         regSubscribe(
-            getRequestManager().onApiError(new Callback<ApiError>() {
-                    @Override
-                    public void execute(ApiError result) {
-                Log.d("asd", "asdasd");
-                    }
+            getRequestManager().onNewAlbum(new Callback<Album>() {
+                @Override
+                public void execute(Album result) {
+                    getRequestManager().getAlbums(mPreferenceProvider.getAnketaId());
+                }
             })
         );
+    }
+
+    public void createNewAlbum(String name) {
+        getView().showProgress();
+        getRequestManager().createAlbum(name);
+    }
+
+    public void onAddAlbumClick() {
+        getView().showNewAlbumDialog();
     }
 }

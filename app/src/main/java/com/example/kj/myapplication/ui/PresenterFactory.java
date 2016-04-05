@@ -3,8 +3,7 @@ package com.example.kj.myapplication.ui;
 import com.example.kj.myapplication.core.BasePresenter;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
-import com.example.kj.myapplication.ui.albums.create.NewAlbumPresenter;
-import com.example.kj.myapplication.ui.albums.list.AlbumsPresenter;
+import com.example.kj.myapplication.ui.albums.AlbumsPresenter;
 import com.example.kj.myapplication.ui.anketa.AnketaPresenter;
 import com.example.kj.myapplication.ui.contacts.ContactsPresenter;
 import com.example.kj.myapplication.ui.login.LoginPresenter;
@@ -34,7 +33,7 @@ public class PresenterFactory {
         }
 
         if (className.equals(LoginPresenter.class.getSimpleName())) {
-            return new LoginPresenter(mRequestManager);
+            return new LoginPresenter(mRequestManager, mPreferenceProvider);
         }
 
         if (className.equals(AnketaPresenter.class.getSimpleName())) {
@@ -43,10 +42,6 @@ public class PresenterFactory {
 
         if (className.equals(AlbumsPresenter.class.getSimpleName())) {
             return new AlbumsPresenter(mRequestManager, mPreferenceProvider);
-        }
-
-        if (className.equals(NewAlbumPresenter.class.getSimpleName())) {
-            return new NewAlbumPresenter(mRequestManager, mPreferenceProvider);
         }
 
         return null;

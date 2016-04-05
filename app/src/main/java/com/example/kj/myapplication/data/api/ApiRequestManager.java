@@ -10,6 +10,7 @@ import com.example.kj.myapplication.core.NetworkRequest;
 import com.example.kj.myapplication.core.RequestThread;
 import com.example.kj.myapplication.data.api.request.AlbumsRequest;
 import com.example.kj.myapplication.data.api.request.ContactsRequest;
+import com.example.kj.myapplication.data.api.request.CreateAlbumRequest;
 import com.example.kj.myapplication.data.api.request.TryAuthRequest;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
 import com.example.kj.myapplication.entity.Album;
@@ -31,6 +32,7 @@ import java.util.List;
 
 public class ApiRequestManager {
     private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
+
     private EventDispatcher mEventDispatcher;
     private Handler mMainHandler;
     private IPreferenceProvider mPreferenceProvider;
@@ -44,19 +46,11 @@ public class ApiRequestManager {
         mEventDispatcher = eventDispatcher;
         mPreferenceProvider = preferenceProvider;
 
-        mEventDispatcher.subscribe(ApiEvents.ERROR_UPDATE_COOKIE, new Callback<List<String>>() {
+        mEventDispatcher.subscribe(ApiEvents.ERROR_UPDATE_COOKIE, new Callback<ArrayList<String>>() {
             @Override
-            public void execute(List<String> result) {
+            public void execute(ArrayList<String> result) {
                 Log.d(LOG_TAG, "Update cookie");
                 mPreferenceProvider.setCookie(result);
-            }
-        });
-
-        onAuth(new Callback<AuthData>() {
-            @Override
-            public void execute(AuthData result) {
-                Log.d(LOG_TAG, "Save secret");
-                mPreferenceProvider.setSecretToken(result.getSecret());
             }
         });
     }
@@ -72,15 +66,19 @@ public class ApiRequestManager {
     }
 
     public int onGetAnketa(Callback<Anketa> callback) {
-        return mEventDispatcher.subscribe(AnketaRequest.class.getSimpleName(), callback);
+        return mEventDispatcher.subscribe(ApiEvents.REQUEST_ANKETA, callback);
     }
 
     public int onGetContacts(Callback<ContactCollection> callback) {
-        return mEventDispatcher.subscribe(ContactsRequest.class.getSimpleName(), callback);
+        return mEventDispatcher.subscribe(ApiEvents.REQUEST_CONTACTS, callback);
     }
 
     public int onGetAlbums(Callback<ArrayList<Album>> callback) {
-        return mEventDispatcher.subscribe(AlbumsRequest.class.getSimpleName(), callback);
+        return mEventDispatcher.subscribe(ApiEvents.REQUEST_ALBUMS, callback);
+    }
+
+    public int onNewAlbum(Callback<Album> callback) {
+        return mEventDispatcher.subscribe(ApiEvents.REQUEST_CREATE_ALBUM, callback);
     }
 
     public int onApiError(Callback<ApiError> callback) {
@@ -92,7 +90,9 @@ public class ApiRequestManager {
     }
 
 
-
+    /**
+     * Пробуем авторизоваться по сохраненным кукам и по секрету
+     */
     public ApiRequestManager tryAuth() {
         SecretToken token = mPreferenceProvider.getSecretToken();
         buildThread(new TryAuthRequest(token)).start();
@@ -100,32 +100,63 @@ public class ApiRequestManager {
         return this;
     }
 
+    /**
+     * Авторизируемся по паре login/password
+     * @param authIdentity identity login/password
+     */
     public ApiRequestManager auth(AuthIdentity authIdentity) {
         buildThread(new LoginPassAuthRequest(authIdentity)).start();
 
         return this;
     }
 
+    /**
+     * Загрузить Анкетц пользователя
+     * @param anketaId мамба id
+     */
     public ApiRequestManager getAnketa(long anketaId) {
         buildThread(new AnketaRequest(anketaId)).start();
 
         return this;
     }
 
+    /**
+     * Загрузить список контактов
+     * @param offset смещение от начала списка
+     */
     public ApiRequestManager getContacts(int offset) {
         buildThread(new ContactsRequest(offset)).start();
 
         return this;
     }
 
+    /**
+     * Загрузить список контактов
+     * @param offset смещение от начала списка
+     * @param limit количество загружаемых контактов
+     */
     public ApiRequestManager getContacts(int offset, int limit) {
         buildThread(new ContactsRequest(offset, limit)).start();
 
         return this;
     }
 
+    /**
+     * Загрузить все альбомы пользователя
+     * @param anketaId мамба id
+     */
     public ApiRequestManager getAlbums(long anketaId) {
         buildThread(new AlbumsRequest(anketaId)).start();
+
+        return this;
+    }
+
+    /**
+     * Создаем новый альбом
+     * @param name название нового альбома
+     */
+    public ApiRequestManager createAlbum(String name) {
+        buildThread(new CreateAlbumRequest(name)).start();
 
         return this;
     }

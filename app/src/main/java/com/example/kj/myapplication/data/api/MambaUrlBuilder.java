@@ -12,57 +12,40 @@ public class MambaUrlBuilder {
         mBaseUrl = BuildConfig.BASE_URL;
     }
 
-    public URL getSecretLoginUrl() {
+    private URL getUrl(String path) {
         try {
-            return new URL(mBaseUrl + "login/secret/");
+            return new URL(mBaseUrl + path);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public URL getSecretLoginUrl() {
+        return getUrl("login/secret/");
     }
 
     public URL getProfileUrl() {
-        try {
-            return new URL(mBaseUrl + "profile/");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getUrl("profile/");
     }
 
     public URL getLoginUrl() {
-        try {
-            return new URL(mBaseUrl + "login/");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getUrl("login/");
     }
 
-    public URL getAllContacts() {
-        try {
-            return new URL(mBaseUrl + "contacts/all/");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public URL getAllContactsUrl() {
+        return getUrl("contacts/all/");
     }
 
-    public URL getAnketa(long anketaId) {
-        try {
-            return new URL(mBaseUrl + "users/" + String.valueOf(anketaId) + "/");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public URL getAnketaUrl(long anketaId) {
+        return getUrl("users/" + String.valueOf(anketaId) + "/");
     }
 
-    public URL getAbums(long anketaId) {
-        try {
-            return new URL(mBaseUrl + "users/" + String.valueOf(anketaId) + "/albums/");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public URL getAlbumsUrl(long anketaId) {
+        return getUrl("users/" + String.valueOf(anketaId) + "/albums/");
+    }
+
+    public URL getCreateAlbumUrl() {
+        return getUrl("albums/");
     }
 }

@@ -27,15 +27,15 @@ public class NetworkRequest {
     static final String LOG_TAG = NetworkRequest.class.getSimpleName();
     static final String COOKIES_HEADER = "Set-Cookie";
 
-    private List<String> mCookie;
+    private ArrayList<String> mCookie;
 
     public NetworkRequest() {}
 
-    public void setCookie(List<String> cookie) {
+    public void setCookie(ArrayList<String> cookie) {
         mCookie = cookie;
     }
 
-    public List<String> getCookie() {
+    public ArrayList<String> getCookie() {
         return mCookie;
     }
 

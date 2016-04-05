@@ -1,4 +1,4 @@
-package com.example.kj.myapplication.ui.albums.list;
+package com.example.kj.myapplication.ui.albums;
 
 import com.example.kj.myapplication.core.IMvpView;
 import com.example.kj.myapplication.entity.Album;
@@ -18,4 +18,9 @@ interface IAlbumsView extends IMvpView {
      * Скрываем крутилку
      */
     void hideProgress();
+
+    /**
+     * показывает диалоговое окно создания нового альбома
+     */
+    void showNewAlbumDialog();
 }

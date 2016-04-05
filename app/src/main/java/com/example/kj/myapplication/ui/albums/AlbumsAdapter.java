@@ -1,4 +1,4 @@
-package com.example.kj.myapplication.ui.albums.list;
+package com.example.kj.myapplication.ui.albums;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

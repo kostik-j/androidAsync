@@ -1,9 +1,8 @@
 package com.example.kj.myapplication.data.api.request;
 
+import com.example.kj.myapplication.data.api.ApiEvents;
 import com.example.kj.myapplication.data.api.MambaUrlBuilder;
-import com.example.kj.myapplication.core.NetworkRequest;
 import com.example.kj.myapplication.data.api.parser.JsonAnketaParser;
-import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.Anketa;
 
 import java.net.MalformedURLException;
@@ -15,6 +14,11 @@ public class AnketaRequest extends Request<Anketa> {
     private MambaUrlBuilder mMambaUrlBuilder = new MambaUrlBuilder();
     private long mAnketaId;
 
+    @Override
+    public String getEventName() {
+        return ApiEvents.REQUEST_ANKETA;
+    }
+
     public AnketaRequest(long anketaId) {
         setParser(new JsonAnketaParser());
         mAnketaId = anketaId;
@@ -24,7 +28,7 @@ public class AnketaRequest extends Request<Anketa> {
     protected String getData() {
         URL url = null;
         try {
-            url = new URL(mMambaUrlBuilder.getAnketa(mAnketaId).toString());
+            url = new URL(mMambaUrlBuilder.getAnketaUrl(mAnketaId).toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

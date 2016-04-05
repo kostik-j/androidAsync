@@ -34,7 +34,7 @@
             android:label="@string/contacts"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.albums.list.AlbumsActivity"
+            android:name=".ui.albums.AlbumsActivity"
             android:label="@string/albums"
             android:screenOrientation="portrait" />
         <activity

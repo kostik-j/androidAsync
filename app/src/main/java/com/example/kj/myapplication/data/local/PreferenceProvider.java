@@ -55,14 +55,14 @@ public class PreferenceProvider implements IPreferenceProvider {
     }
 
     @Override
-    public void setCookie(@NonNull List<String> cookie) {
+    public void setCookie(@NonNull ArrayList<String> cookie) {
         String str = TextUtils.join(";", cookie);
         mSharedPreferences.edit().putString(SETTING_COOKIE, str).apply();
         Log.d(LOG_TAG, "Save Cookies" + str);
     }
 
     @Override
-    public List<String> getCookie() {
+    public ArrayList<String> getCookie() {
         String cookieStr = mSharedPreferences.getString(SETTING_COOKIE, "");
         if (cookieStr.isEmpty()) {
             return null;

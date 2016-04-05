@@ -20,5 +20,6 @@
     <string name="albums">Альбомы</string>
     <string name="contact_photo">contactAvatar</string>
     <string name="all_contacts_loaded">Все контакты загружены</string>
+    <string name="album_name">Нзвание альбома</string>
 
 </resources>

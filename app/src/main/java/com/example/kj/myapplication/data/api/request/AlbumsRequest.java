@@ -1,7 +1,7 @@
 package com.example.kj.myapplication.data.api.request;
 
+import com.example.kj.myapplication.data.api.ApiEvents;
 import com.example.kj.myapplication.data.api.parser.JsonAlbumsParser;
-import com.example.kj.myapplication.data.api.parser.JsonBaseParser;
 import com.example.kj.myapplication.entity.Album;
 
 import java.net.URL;
@@ -18,8 +18,13 @@ public class AlbumsRequest extends Request<ArrayList<Album>> {
     }
 
     @Override
+    public String getEventName() {
+        return ApiEvents.REQUEST_ALBUMS;
+    }
+
+    @Override
     protected String getData() {
-        URL url = getUrlBuilder().getAbums(mAnketaId);
+        URL url = getUrlBuilder().getAlbumsUrl(mAnketaId);
 
         return getNetworkRequest().makeGetRequest(url);
     }
