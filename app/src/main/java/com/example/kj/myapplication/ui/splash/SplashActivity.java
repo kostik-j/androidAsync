@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.kj.myapplication.MyApplication;
 import com.example.kj.myapplication.R;
+import com.example.kj.myapplication.ui.login.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity
         implements ISplashView {
@@ -59,5 +60,11 @@ public class SplashActivity extends AppCompatActivity
     @Override
     public void showError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLoginForm(int id) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        this.startActivityForResult(intent, id);
     }
 }

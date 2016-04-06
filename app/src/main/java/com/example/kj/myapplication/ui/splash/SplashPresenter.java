@@ -7,12 +7,12 @@ import android.net.Uri;
 
 import com.example.kj.myapplication.core.MVP.BasePresenter;
 import com.example.kj.myapplication.core.Callback;
+import com.example.kj.myapplication.core.network.NetworkUtils;
 import com.example.kj.myapplication.data.api.ApiErrorHelper;
 import com.example.kj.myapplication.data.api.ApiRequestManager;
 import com.example.kj.myapplication.data.local.IPreferenceProvider;
 import com.example.kj.myapplication.entity.ApiError;
 import com.example.kj.myapplication.entity.AuthData;
-import com.example.kj.myapplication.ui.login.LoginActivity;
 
 public class SplashPresenter extends BasePresenter<ISplashView> {
     private final int ID = 1;
@@ -27,23 +27,26 @@ public class SplashPresenter extends BasePresenter<ISplashView> {
     @Override
     protected void onViewAttached() {
         regSubscribe(
-            getRequestManager().onAuth(new Callback<AuthData>() {
-                @Override
-                public void execute(AuthData result) {
-                    showProfile();
-                }
-            })
+                getRequestManager().onAuth(new Callback<AuthData>() {
+                    @Override
+                    public void execute(AuthData result) {
+                        showProfile();
+                    }
+                })
         );
 
-        getRequestManager().tryAuth();
+        NetworkUtils utils = new NetworkUtils(getView().getViewContext());
+        if (!utils.hasConnection()) {
+            getView().showLoginForm(ID);
+        } else {
+            getRequestManager().tryAuth();
+        }
     }
 
     @Override
     public void onApiError(ApiError apiError) {
         if (ApiErrorHelper.isAuthError(apiError)) {
-            Intent intent = new Intent(getView().getViewContext(), LoginActivity.class);
-            SplashActivity splashActivity = (SplashActivity) getView().getViewContext();
-            splashActivity.startActivityForResult(intent, ID);
+            getView().showLoginForm(ID);
         } else {
             super.onApiError(apiError);
         }
@@ -64,5 +67,6 @@ public class SplashPresenter extends BasePresenter<ISplashView> {
             }
         }
     }
+
 
 }

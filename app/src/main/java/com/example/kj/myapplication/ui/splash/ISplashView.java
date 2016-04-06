@@ -8,4 +8,6 @@ public interface ISplashView extends IMvpView {
      * закрываем вьюху
      */
     void close();
+
+    void showLoginForm(int id);
 }

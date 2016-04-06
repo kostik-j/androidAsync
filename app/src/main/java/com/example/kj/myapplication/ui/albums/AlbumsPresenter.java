@@ -25,12 +25,12 @@ final public class AlbumsPresenter extends BasePresenter<IAlbumsView> {
     protected void onViewAttached() {
         regSubscribe(
             getRequestManager().onGetAlbums(new Callback<ArrayList<Album>>() {
-                    @Override
+                @Override
                 public void execute(ArrayList<Album> result) {
-                if (isViewAttached()) {
-                    getView().showAlbums(result);
-                    getView().hideProgress();
-                }
+                    if (isViewAttached()) {
+                        getView().showAlbums(result);
+                        getView().hideProgress();
+                    }
                 }
             })
         );

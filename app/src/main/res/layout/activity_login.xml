@@ -36,7 +36,7 @@
 
             <EditText
                 android:id="@+id/login"
-                android:text="kostik-j@yandex.ru"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_email"
@@ -52,7 +52,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:text="iamworker666"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"

@@ -56,7 +56,6 @@ public class AlbumsActivity extends AppCompatActivity
         lv.setAdapter(mAdapter);
 
         mFloatingActionButton.setOnClickListener(this);
-        startActivity(new Intent(this, SplashActivity.class));
     }
 
     @Override

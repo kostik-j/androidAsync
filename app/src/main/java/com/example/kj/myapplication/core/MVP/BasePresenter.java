@@ -36,11 +36,6 @@ public class BasePresenter<V extends IMvpView> extends ApiErrorCallback {
         mView = view;
         onViewAttached();
 
-        NetworkUtils utils = new NetworkUtils(getView().getViewContext());
-        if (!utils.hasConnection()) {
-            getView().showError(getView().getViewContext().getString(R.string.network_is_unreachable));
-        }
-
         regSubscribe(getRequestManager().onApiError(this));
     }
 
@@ -75,6 +70,12 @@ public class BasePresenter<V extends IMvpView> extends ApiErrorCallback {
         if (!isViewAttached()) {
             return;
         }
+
+        if (apiError.getErrorCode() == ApiErrorHelper.BAD_CONNECTION_ERROR_CODE) {
+            getView().showError(getView().getViewContext().getString(R.string.network_is_unreachable));
+            return;
+        }
+
         if (ApiErrorHelper.isAuthError(apiError)) {
             Intent intent = new Intent(getView().getViewContext(), SplashActivity.class);
             getView().getViewContext().startActivity(intent);

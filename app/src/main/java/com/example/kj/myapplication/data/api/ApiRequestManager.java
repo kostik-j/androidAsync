@@ -55,14 +55,17 @@ public class ApiRequestManager {
     }
 
     private void runRequest(Request request, String tag) {
-        if (mNetworkUtils.hasConnection()) {
-            request.setNetworkRequest(new NetworkRequest());
-            request.setCookie(mPreferenceProvider.getCookie());
-            request.setTag(tag);
-
-            RequestThread thread = new RequestThread(request, mEventDispatcher, mMainHandler);
-            thread.start();
+        if (!mNetworkUtils.hasConnection()) {
+            ApiError error = new ApiError(ApiErrorHelper.BAD_CONNECTION_ERROR_CODE, "", tag);
+            mEventDispatcher.dispatch(ApiEvents.ERROR_EVENT, error);
+            return;
         }
+        request.setNetworkRequest(new NetworkRequest());
+        request.setCookie(mPreferenceProvider.getCookie());
+        request.setTag(tag);
+
+        RequestThread thread = new RequestThread(request, mEventDispatcher, mMainHandler);
+        thread.start();
     }
 
     public int onAuth(Callback<AuthData> callback) {
